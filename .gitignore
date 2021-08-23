@@ -8,3 +8,12 @@
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
+
+###> composer ###
+composer.phar
+composer.lock
+###< composer ###
+
+###> PHPStorm ###
+.idea
+###< PHPStorm ###
