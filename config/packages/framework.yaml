@@ -11,6 +11,10 @@ framework:
         cookie_secure: auto
         cookie_samesite: lax
 
+    translator: ~
+    templating:
+        engines: [ 'twig', 'php' ]
+
     #esi: true
     #fragments: true
     php_errors:
