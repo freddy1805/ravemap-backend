@@ -1,0 +1,38 @@
+{% trans_default_domain 'FOSUserBundle' %}
+
+<div class="login-box">
+    <div class="login-logo">
+        <img src="{{ asset('img/hr_app.png') }}" class="hr-logo card-shadow" />
+        <h3>{{ 'app.title'|trans({}, 'messages') }}</h3>
+    </div>
+
+    <div class="login-box-body card-shadow">
+        <p class="login-box-msg">{{ 'reset.reset.modt'|trans({}, 'messages') }}</p>
+
+        {{ form_start(form, {
+            'action': path('fos_user_resetting_reset', {'token': token}),
+            'attr': { 'class': 'fos_user_resetting_reset' , 'style': 'margin-bottom: 1rem;' }
+        }) }}
+        <div class="form-group has-feedback">
+            {{ form_widget(form.plainPassword.first, {'attr': {'class':'form-control', 'placeholder': 'form.new_password'|trans}}) }}
+            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+        </div>
+        <div class="form-group has-feedback">
+            {{ form_widget(form.plainPassword.second, {'attr': {'class':'form-control', 'placeholder': 'form.new_password_confirmation'|trans}}) }}
+            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12">
+                <button type="submit" class="btn bg-hr-color btn-block btn-flat">
+                    {{ 'resetting.reset.submit'|trans }}
+                </button>
+            </div>
+        </div>
+        {{ form_end(form) }}
+
+        <a href="{{ path('fos_user_security_login') }}">
+            {{ 'reset.reset.abort'|trans({}, 'messages') }}
+        </a>
+    </div>
+</div>

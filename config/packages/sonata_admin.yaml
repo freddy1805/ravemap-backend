@@ -1,0 +1,33 @@
+sonata_admin:
+    title: 'rav3map'
+    title_logo: 'img/logo/logo_small_icon_only.png'
+    security:
+        role_admin: ROLE_ADMIN
+        role_super_admin: ROLE_SUPER_ADMIN
+    dashboard:
+        groups:
+            system:
+                label: menu.system
+                label_catalogue: messages
+                icon: '<i class="fa fa-cog"></i>'
+                items:
+                    - admin.user
+            content:
+                label: menu.content
+                label_catalogue: messages
+                icon: '<i class="fa fa-folder"></i>'
+                items:
+                    - admin.event
+
+        blocks:
+            - { type: sonata.admin.block.admin_list, position: left }
+    options:
+        legacy_twig_text_extension: false
+
+    templates:
+        user_block: 'Admin/Block/user.html.twig'
+
+sonata_block:
+    blocks:
+        sonata.admin.block.admin_list:
+            contexts: [admin]

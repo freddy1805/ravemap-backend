@@ -1,6 +1,26 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
+#### FOS USER BUNDLE ####################
+fos_user_login:
+  resource: "@FOSUserBundle/Resources/config/routing/security.xml"
+fos_user_change_pw:
+  resource: "@FOSUserBundle/Resources/config/routing/change_password.xml"
+#########################################
+#### API DOCUMENTATION ##################
+app.swagger_ui:
+  path: /admin/api/doc
+  methods: GET
+  defaults: { _controller: nelmio_api_doc.controller.swagger_ui }
 
-fos_user:
-  resource: "@FOSUserBundle/Resources/config/routing/all.xml"
+app.swagger:
+  path: /admin/api/doc.json
+  methods: GET
+  defaults: { _controller: nelmio_api_doc.controller.swagger }
+##########################################
+#### API AUTHORIZATION ###################
+api_login_check:
+  path: /api/login_check
+
+gesdinet_jwt_refresh_token:
+  path: /api/token/refresh
+  methods: ['POST']
+  controller: gesdinet.jwtrefreshtoken::refresh
+##########################################

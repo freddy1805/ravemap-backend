@@ -1,0 +1,83 @@
+{% form_theme form _self %}
+
+{% extends '@SonataAdmin/Form/form_admin_fields.html.twig' %}
+
+{%- block location_row -%}
+    <div class="form-group">
+        {{ form_label(form) }}
+        {{ form_widget(form) }}
+        {{ form_help(form) }}
+    </div>
+{%- endblock -%}
+
+{%- block location_widget -%}
+    <div class="row">
+        {{ block('form_widget') }}
+    </div>
+    {% if form.lat.vars.value and form.long.vars.value %}
+        <div class="mapouter">
+            <div class="gmap_canvas">
+                <iframe width="100%" height="350" id="gmap_canvas"
+                        src="https://maps.google.com/maps?q={{ form.lat.vars.value }},{{ form.long.vars.value }}&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                        frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
+                <br>
+                <style>.mapouter {
+                        position: relative;
+                        text-align: right;
+                        height: 350px;
+                        width: 100%;
+                    }</style>
+                <style>.gmap_canvas {
+                        overflow: hidden;
+                        background: none !important;
+                        height: 350px;
+                        width: 100%;
+                    }</style>
+            </div>
+        </div>
+    {% endif %}
+{%- endblock -%}
+
+{%- block location_inner_row -%}
+    <div class="form-group col-md-6">
+        {{ form_label(form) }}
+        {{ form_widget(form) }}
+        {{ form_help(form) }}
+    </div>
+{%- endblock -%}
+
+{%- block location_inner_widget -%}
+    <div class="input-group col-md-12">
+        <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
+        {{ block('form_widget') }}
+    </div>
+{%- endblock -%}
+
+{%- block location_name_row -%}
+    <div class="form-group col-md-12">
+        {{ form_label(form) }}
+        {{ form_widget(form) }}
+        {{ form_help(form) }}
+    </div>
+{%- endblock -%}
+
+{%- block location_name_widget -%}
+    <div class="input-group col-md-12">
+        {{ block('form_widget') }}
+    </div>
+{%- endblock -%}
+
+
+{%- block location_half_row -%}
+    <div class="form-group col-md-6">
+        {{ form_label(form) }}
+        {{ form_widget(form) }}
+        {{ form_help(form) }}
+    </div>
+{%- endblock -%}
+
+{%- block location_half_widget -%}
+    <div class="input-group col-md-12">
+        {{ block('form_widget') }}
+    </div>
+{%- endblock -%}

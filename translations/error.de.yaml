@@ -1,0 +1,5 @@
+error:
+  404:
+    title: Seite nicht gefunden
+    content: Die Seite die du versuchst aufzurufen, wurde nicht gefunden! <br/> Fall dies eine Einladung war, dann ist diese nun abgelaufen....
+    back: Zurück zur Startseite

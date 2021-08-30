@@ -1,0 +1,12 @@
+app:
+  name: rav3map
+
+
+login:
+  title: Login
+  headline: Please log in
+  user:
+    name: Username
+    password: Password
+    remember: Remember me
+    submit: Login

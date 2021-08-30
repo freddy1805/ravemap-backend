@@ -1,0 +1,16 @@
+{% extends "@FOSUser/layout.html.twig" %}
+
+{% block title %}
+{{ 'login.title'|trans }}
+{% endblock title %}
+
+{% block extra_style %}
+    <link href="{{ asset('css/signin.css') }}" rel="stylesheet" type="text/css" />
+{% endblock extra_style %}
+
+{% block fos_user_content %}
+    {{ include('@FOSUser/Security/login_content.html.twig') }}
+{% endblock fos_user_content %}
+
+{% block javascripts %}
+{% endblock javascripts %}

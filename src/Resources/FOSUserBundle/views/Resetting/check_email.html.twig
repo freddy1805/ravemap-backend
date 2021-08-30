@@ -1,0 +1,21 @@
+{% extends "@FOSUser/layout.html.twig" %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block title %}
+    {{ 'reset.request.title'|trans({}, 'messages') }}
+{% endblock %}
+
+{% block fos_user_content %}
+    <div class="login-box">
+        <div class="login-logo">
+            <img src="{{ asset('img/hr_app.png') }}" class="hr-logo card-shadow" />
+            <h3>{{ 'app.title'|trans({}, 'messages') }}</h3>
+        </div>
+
+        <div class="login-box-body card-shadow">
+            <p>{{ 'resetting.check_email'|trans({'%tokenLifetime%': tokenLifetime})|nl2br }}</p>
+            <a class="btn bg-hr-color btn-flat btn-block" href="{{ path('fos_user_security_login') }}">{{ 'reset.check_mail.login'|trans({}, 'messages') }}</a><br>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Frederik Roettgerkamp">
+    <title>{{ 'app.name'|trans({}, 'messages') }} · {% block title %}{% endblock title %}</title>
+
+
+    <!-- Bootstrap core CSS -->
+    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" href="{{ asset('img/logo/logo_small_icon_only_inverted.png') }}" sizes="180x180" />
+    <link rel="icon" href="{{ asset('img/logo/logo_small_icon_only_inverted.png') }}" sizes="32x32" type="image/png" />
+    <link rel="icon" href="{{ asset('img/logo/logo_small_icon_only_inverted.png') }}" sizes="16x16" type="image/png" />
+    <link rel="mask-icon" href="{{ asset('img/logo/logo_small_icon_only_inverted.png') }}" color="#212121" />
+    <link rel="icon" href="{{ asset('img/logo/logo_small_icon_only_inverted.png') }}" />
+    <meta name="theme-color" content="#212121">
+
+    {% block extra_style %}
+    {% endblock extra_style %}
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+</head>
+<body class="text-center">
+
+{% block fos_user_content %}
+{% endblock fos_user_content %}
+
+
+{% block javascripts %}{% endblock javascripts %}
+</body>
+</html>

@@ -1,0 +1,37 @@
+{% block user_block %}
+    <div class="user-block">
+        <div style="display: flex; flex-direction: column; justify-content: center; align-items: center">
+            <img src="{{ asset(app.user.image|default('img/default_user.png')) }}" width="50" style="border-radius: 100%; margin-top: 1rem;" />
+            <h4 style="margin-bottom: 0 !important;">{{ app.user.username }}</h4>
+            <div class="text-center margin-bottom">
+                {% for role in app.user.roles %}
+                    <span class="badge bg-yellow">{{ role }}</span>
+                {% endfor %}
+            </div>
+            {% if  is_granted('ROLE_ADMIN') %}
+                <div class="btn-group btn-group-justified" role="group">
+                    <div class="btn-group" role="group">
+                        <a href="{{ path('app.swagger_ui') }}" class="btn btn-default btn-flat">
+                            <i class="fa fa-plug"></i>
+                            {{ 'app.api'|trans }}
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+            <div class="btn-group btn-group-justified" role="group">
+                <div class="btn-group" role="group">
+                    <a href="{{ path('fos_user_change_password') }}" class="btn btn-primary btn-flat">
+                        <i class="fa fa-key"></i>
+                        {{ 'app.change_password'|trans }}
+                    </a>
+                </div>
+                <div class="btn-group" role="group">
+                    <a href="{{ path('fos_user_security_logout') }}" class="btn btn-danger btn-flat">
+                        <i class="fa fa-sign-out"></i>
+                        {{ 'app.logout'|trans }}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

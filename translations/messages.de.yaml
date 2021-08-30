@@ -1,0 +1,89 @@
+
+### SONATA TRANSLATIONS ###
+User List: Nutzer
+User Create: Neuen Nutzer anlegen
+Event List: Veranstaltungen
+Event Create: Neue Veranstaltung anlegen
+###########################
+
+### BASE APP TRANSLATIONS ###
+app:
+  name: rav3map
+  api: API-Dokumentation
+  change_password: Passwort ändern
+  logout: Abmelden
+#############################
+
+login:
+  title: Login
+  headline: Bitte loggen Sie sich ein
+  user:
+    name: Nutzername
+    password: Passwort
+    remember: Eingeloggt bleiben
+    submit: Login
+
+menu:
+  system: Verwaltung
+  media: Medien
+  content: Inhalte
+
+user:
+  title: Nutzer
+  create: Neuen Nutzer erstellen
+  id: Id
+  username: Nutzername
+  display_name: Öffentlicher Name
+  email: E-Mail
+  raver_score: Raver-Score
+  password: Passwort
+  enabled: Konto aktiv
+  last_login: Zul. eingeloggt
+  actions: Schenllzugriff
+  tab:
+    meta: Metainformation
+    roles: Nutzerrechte
+  block:
+    meta: Informationen
+    roles: Rechte
+  roles:
+    user: Nutzer
+    api_user: Nutzer mit API-Zugriff
+    admin: Admin
+    supervisor: Supervisor
+
+event:
+  title: Veranstaltungen
+  create: Neue Veranstaltung erstellen
+  id: Id
+  name: Veranstaltungsname
+  max_invites: max. Teilnehmeranzahl
+  description: Beschreibung
+  date: Datum
+  date_help: Wann beginnt die Veranstaltung? [Tag - Monat - Jahr - Stunde - Minute]
+  location: Standort
+  creator: Eingestellt von
+  approval: Offiziell angemeldet
+  approval_help: Wurde diese Veranstaltung bei den Behörden angemeldet?
+  event_mode: Modus
+  modes:
+    invite: Jeder Teilnehmer kann Einladungen versenden
+    mod_only: Nur Moderatoren können Eiladungen versenden
+    private: Privat! Nur der Veranstalter kann Einladungen versenden
+  tab:
+    meta: Metainformation
+    creator: Veranstalter
+    invites: Einladungen
+  block:
+    meta: Informationen
+    creator: Eingestellt von
+    invites: Alle Einladungen
+
+
+location:
+  name: Zusammenfassung
+  city: Stadt
+  country: Land
+  placeholder: Wird automatisch, anhand der Koordinaten, von Google Maps geladen
+  lat: Breitengrad
+  long: Längengrad

@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>{{ 'error.404.title'|trans({}, 'error') }}</h1>
+    <p>
+        {{ 'error.404.content'|trans({}, 'error')|raw }}
+        <br />
+        <a class="btn btn-secondary mt-4 mb-4 text-white" href="{{ path('index') }}">{{ 'error.404.back'|trans({}, 'error') }}</a>
+    </p>
+{% endblock %}

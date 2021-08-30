@@ -1,0 +1,13 @@
+invite:
+  title: Du wurdest eingeladen!
+  from_user: hat dich eingeladen
+  location: in location
+  location_long: Einladung zu einer Veranstaltung in location
+  choices:
+    selection: Deine Entscheidung...
+    yes: Zusagen!
+    no: Absagen
+    maybe: Unschlüssig....
+  accepted: Du hast "event" zugesagt!
+  denied: Du hast "event" abgesagt!
+  maybe: Du bist dir bei "event" noch unschlüssig...

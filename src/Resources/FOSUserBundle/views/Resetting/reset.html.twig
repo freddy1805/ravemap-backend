@@ -1,0 +1,9 @@
+{% extends "@FOSUser/layout.html.twig" %}
+
+{% block title %}
+    {{ 'reset.reset.title'|trans({}, 'messages') }}
+{% endblock %}
+
+{% block fos_user_content %}
+    {% include "@FOSUser/Resetting/reset_content.html.twig" %}
+{% endblock fos_user_content %}

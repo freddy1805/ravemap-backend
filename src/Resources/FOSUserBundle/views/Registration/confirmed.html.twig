@@ -1,0 +1,22 @@
+{% extends "@FOSUser/layout.html.twig" %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block fos_user_content %}
+    <div class="login-box">
+        <div class="login-logo">
+            <a href="{{ path('index') }}">
+                <img src="{{ asset('img/hr_app.png') }}" class="hr-logo card-shadow" />
+                <h3 class="no-margin">{{ 'app.title'|trans({}, 'messages') }}</h3>
+            </a>
+        </div>
+        <!-- /.login-logo -->
+        <div class="login-box-body card-shadow">
+            <h4 class="login-box-msg">Bestätigt!</h4>
+            <p>{{ 'registration.confirmed'|trans({'%username%': user.fullName}) }}</p>
+            {% if targetUrl %}
+                <p><a href="{{ targetUrl }}">{{ 'registration.back'|trans }}</a></p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock fos_user_content %}

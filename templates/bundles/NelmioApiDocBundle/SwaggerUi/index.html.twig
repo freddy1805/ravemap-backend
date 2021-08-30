@@ -1,0 +1,41 @@
+{% extends '@!NelmioApiDoc/SwaggerUi/index.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    <!-- OVERRIDE SOME STYLE PARAMS FOR API DOC --->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    <style>
+        a {
+            text-decoration: none !important;
+        }
+        header:before {
+            background-color: #000000;
+        }
+        header #logo img {
+            background-color: transparent;
+        }
+        header #logo {
+            right: unset;
+            left: 40px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+        header #logo span {
+            font-size: 20px;
+            margin-left: 20px;
+            font-family: 'Source Sans Pro',sans-serif;
+            font-weight: 600;
+            line-height: 1.1;
+            color: #fff;
+        }
+        #swagger-ui.api-platform .info .title{
+            color: #000000;
+        }
+    </style>
+{% endblock %}
+
+{% block header %}
+    <a id="logo" href="{{ path('sonata_admin_dashboard') }}">
+        <img src="{{ asset('img/logo/logo_white_large.png') }}" alt="{{ 'app.name'|trans({}, 'messages') }}" />
+    </a>
+{% endblock header %}
