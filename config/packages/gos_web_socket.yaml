@@ -1,0 +1,16 @@
+gos_web_socket:
+  authentication:
+    enable_authenticator: true
+    providers:
+      custom:
+        firewalls: [main, api] # This can be an array to specify multiple firewalls or a string when specifying a single firewall
+        session_handler: Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler
+  server:
+    # The host IP address on the server which connections for the websocket server are accepted.
+    host: 127.0.0.1
+    # The port on the server which connections for the websocket server are accepted.
+    port: 1234
+    router:
+      resources:
+        - resource: '%kernel.project_dir%/config/pubsub/websocket/*'
+          type: 'glob'

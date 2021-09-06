@@ -123,6 +123,7 @@ class Event
     /**
      * @var Collection
      * @ORM\OneToMany(targetEntity="App\Entity\Post", mappedBy="event")
+     * @ORM\OrderBy({"timestamp" = "ASC"})
      * @Serializer\Groups({
      *     "event_messages"
      * })
@@ -137,9 +138,16 @@ class Event
 
     /**
      * Event constructor.
+     * @param string|null $name
      */
-    public function __construct()
+    public function __construct(string $name = null, string $id = null)
     {
+        if ($name) {
+            $this->name = $name;
+        }
+        if ($id) {
+            $this->id = $id;
+        }
         $this->invites = new ArrayCollection();
         $this->date = new \DateTime();
         $this->posts = new ArrayCollection();

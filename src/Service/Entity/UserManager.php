@@ -3,6 +3,7 @@
 namespace App\Service\Entity;
 
 use App\Entity\User;
+use App\Util\EntityMapper;
 
 class UserManager extends BaseManager {
 

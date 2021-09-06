@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Main;
 
 use App\Entity\Invite;
 use App\Service\Entity\InviteManager;
@@ -39,7 +39,8 @@ class InviteController extends AbstractController {
             }
 
             return $this->render('Controller/Invite/detail.html.twig', [
-                'invite' => $invite
+                'invite' => $invite,
+                'background' => false
             ]);
         }
 

@@ -1,0 +1,64 @@
+{% extends '@SonataAdmin/standard_layout.html.twig' %}
+
+{% block meta_tags %}
+    {% apply spaceless %}
+        {{ parent() }}
+    {% endapply %}
+{% endblock %}
+
+{% block stylesheets %}
+    {% apply spaceless %}
+        {{ parent() }}
+        <link rel="shortcut icon" type="image/x-icon" href="{{ asset('img/logo/logo_small_icon_only.png') }}">
+    {% endapply %}
+{% endblock %}
+
+{% block sonata_head_title %}
+    {% apply spaceless %}
+        {{ parent() }}
+    {% endapply %}
+{% endblock %}
+
+{% block sonata_page_content_header %}
+    {% apply spaceless %}
+        {% if app.request.get('_route') == 'sonata_admin_dashboard' %}
+            <h1>{{ 'app.name'|trans }}</h1>
+            <h4>Dashboard <small>Version {{ app_version }}</small></h4>
+        {% else %}
+            {{ parent() }}
+        {% endif %}
+    {% endapply %}
+{% endblock sonata_page_content_header %}
+
+{% block sonata_header %}
+    {% apply spaceless %}
+        {{ parent() }}
+    {% endapply %}
+{% endblock %}
+
+{% block sonata_wrapper %}
+    {% apply spaceless %}
+        {{ parent() }}
+        <footer class="main-footer">
+            <div class="pull-right hidden-xs">
+                <b>Version</b> {{ app_version }}
+            </div>
+            <strong>Copyright © {{ date()|date('Y')}} Frederik Roettgerkamp.</strong> All rights
+            reserved.
+        </footer>
+    {% endapply %}
+{% endblock sonata_wrapper %}
+
+
+{% block javascripts %}
+    {% apply spaceless %}
+        {{ parent() }}
+        <script src="{{ asset('ckeditor/ckeditor.js') }}"></script>
+        <script src="{{ asset('js/static_page.js') }}" type="text/javascript"></script>
+        <script type="text/javascript">
+            $(document).ready(() => {
+                StaticPageEditor.init();
+            });
+        </script>
+    {% endapply %}
+{% endblock %}

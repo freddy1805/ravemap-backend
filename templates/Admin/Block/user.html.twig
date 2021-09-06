@@ -1,7 +1,7 @@
 {% block user_block %}
     <div class="user-block">
         <div style="display: flex; flex-direction: column; justify-content: center; align-items: center">
-            <img src="{{ asset(app.user.image|default('img/default_user.png')) }}" width="50" style="border-radius: 100%; margin-top: 1rem;" />
+            <img src="{{ asset('img/default_user.png') }}" width="50" style="border-radius: 100%; margin-top: 1rem;" />
             <h4 style="margin-bottom: 0 !important;">{{ app.user.username }}</h4>
             <div class="text-center margin-bottom">
                 {% for role in app.user.roles %}

@@ -3,5 +3,8 @@ twig:
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
     exception_controller: null
+    globals:
+        app_name: '%app_name%'
+        app_version: '%app_version%'
     form_themes:
         - 'Form/theme.html.twig'

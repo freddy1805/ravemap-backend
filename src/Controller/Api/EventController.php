@@ -63,6 +63,31 @@ class EventController extends BaseApiController {
     }
 
     /**
+     * @OA\Get(
+     *     operationId="getLocation",
+     *     summary="Get detailed event location data",
+     *     tags={"Event"},
+     *     @OA\Response(response="200", description="Returns json object with detailed event location data"),
+     *     @OA\Response(response="401", description="Login faild. Invalid credentials")
+     * )
+     * @Route("/{id}/location", name="location", methods={"GET"})
+     * @param string $id
+     * @return Response
+     */
+    public function locationAction(string $id): Response
+    {
+        $event = $this->eventManager->getById($id);
+
+        if (!$event) {
+            throw new NotFoundHttpException('Event not found');
+        }
+
+        return new Response($this->serializeToJson($event, ['event_location']), 200, [
+            'content-type' => self::JSON_CONTENT_TYPE
+        ]);
+    }
+
+    /**
      * @OA\Post(
      *     operationId="create",
      *     summary="Create a new event",

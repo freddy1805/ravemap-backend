@@ -1,7 +1,20 @@
+homepage:
+  path: /
+  controller: App\Controller\DefaultController::indexAction
+
+ravemap_map_image_event:
+  path: /mapimage/{eventId}.png
+  controller: App\Controller\MapImageController::eventMapImageAction
+
 controllers:
-  resource: ../../src/Controller/
-  exclude: ../../src/Controller/Api
+  resource: ../../src/Controller/Main
   type: annotation
+  prefix: /{_locale}
+  requirements:
+    _locale: '[a-z]{2}'
+  defaults:
+    _locale: '%locale%'
+
 
 api_controllers:
   prefix: /api

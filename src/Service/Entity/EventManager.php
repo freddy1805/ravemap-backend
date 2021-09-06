@@ -4,10 +4,20 @@ namespace App\Service\Entity;
 
 use App\Entity\Event;
 use App\Entity\Invite;
+use App\Entity\Post;
 use App\Entity\User;
 use App\Exception\ValidationException;
 use App\Service\GeolocationService;
+use App\Util\EntityMapper;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
+use Psr\Cache\InvalidArgumentException;
+use Sonata\MediaBundle\Provider\ImageProvider;
+use Symfony\Component\Cache\Adapter\ApcuAdapter;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\ItemInterface;
 
 class EventManager extends BaseManager {
 
@@ -27,17 +37,28 @@ class EventManager extends BaseManager {
 
     private InviteManager $inviteManager;
 
+    private ImageProvider $imageProvider;
+
+    private CacheInterface $cache;
+
     /**
      * EventManager constructor.
      * @param EntityManagerInterface $entityManager
      * @param GeolocationService $geolocationService
      * @param InviteManager $inviteManager
+     * @param ImageProvider $imageProvider
      */
-    public function __construct(EntityManagerInterface $entityManager, GeolocationService $geolocationService, InviteManager $inviteManager)
-    {
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        GeolocationService $geolocationService,
+        InviteManager $inviteManager,
+        ImageProvider $imageProvider
+    ) {
         parent::__construct($entityManager);
         $this->geolocationService = $geolocationService;
         $this->inviteManager = $inviteManager;
+        $this->imageProvider = $imageProvider;
+        $this->cache = new ApcuAdapter();
     }
 
     /**
@@ -47,6 +68,92 @@ class EventManager extends BaseManager {
     public function getByCreator(User $creator): array
     {
         return $this->repository->findBy(['creator' => $creator]);
+    }
+
+    /**
+     * @return array
+     */
+    public function getMessageChannels(): array
+    {
+        $channels = [];
+        $events = $this->repository->findAll();
+
+        /** @var Event $event */
+        foreach ($events as $event) {
+            $channels[$event->getId()] = [
+                'connections' => [],
+                'posts' => $event->getPosts()
+            ];
+        }
+
+        return $channels;
+    }
+
+    /**
+     * @param UserInterface $user
+     * @param Event $event
+     * @param string $content
+     * @return array
+     */
+    public function postNewMessage(UserInterface $user, Event $event, string $content): array
+    {
+        /** @var Post $post */
+        $post = EntityMapper::arrayToEntity(Post::class, [
+            'author' => $user,
+            'event' => $event,
+            'content' => $content
+        ]);
+
+        $event->addPost($post);
+        $this->entityManager->persist($post);
+        $this->save($event);
+
+        return [
+            'new' => $post,
+            'messages' => $this->makeArrayMessages($event->getPosts()->toArray())
+        ];
+    }
+
+    /**
+     * @param string $id
+     * @return array
+     */
+    public function getArrayMessages(string $id): array
+    {
+        /** @var Event $event */
+        $event = $this->getById($id);
+
+        return $this->makeArrayMessages($event->getPosts()->toArray());
+    }
+
+    /**
+     * @param Post[] $messages
+     * @return array
+     * @throws InvalidArgumentException
+     */
+    public function makeArrayMessages(array $messages): array
+    {
+        $this->cache->clear();
+        $result = [];
+        /**
+         * @var int $key
+         * @var Post $message
+         */
+        foreach ($messages as $key => $message) {
+            $result[$key] = $this->cache->get('message-' . $message->getId(), function (ItemInterface $cacheItem) use ($message) {
+                $cacheItem->expiresAfter(86400);
+                $arrayMessage = $message->toArray();
+                if ($image = $message->getAuthor()->getImage()) {
+                    $arrayMessage['author']['image']['medium'] = 'https://ravemap.tk' . $this->imageProvider->generatePublicUrl(
+                        $image,
+                        'user_image_medium'
+                    );
+                }
+                return $arrayMessage;
+            });
+        }
+
+        return $result;
     }
 
     /**
@@ -75,7 +182,7 @@ class EventManager extends BaseManager {
             $this->entityManager->persist($object);
             $this->entityManager->flush();
             return true;
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             return false;
         }
     }

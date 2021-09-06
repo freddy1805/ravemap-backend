@@ -1,0 +1,3 @@
+event_messages_topic:
+  pattern: event/messages/{event_ref}
+  callback: 'event.messages.topic'

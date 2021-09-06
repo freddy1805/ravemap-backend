@@ -81,3 +81,12 @@
         {{ block('form_widget') }}
     </div>
 {%- endblock -%}
+
+{%- block slug_widget -%}
+    <div class="input-group col-md-12">
+        <div class="input-group-addon w-25">
+            <span id="slug_host">{{ absolute_url('/') }}</span>
+        </div>
+        {{ block('form_widget') }}
+    </div>
+{%- endblock -%}

@@ -12,24 +12,28 @@
 {% endblock %}
 
 {% block body %}
-    <h5>{{ 'invite.title'|trans({}, 'invites') }}</h5>
-    <img src="{{ path('ravemap_map_image_event', {'eventId': invite.event.id}) }}" class="rounded-circle" style="width: 150px; height: auto;" alt="{{ invite.event.name }}">
-    <h3 class="mt-1 mb-0">{{ invite.event.name }}</h3>
-    <p class="fst-italic mb-3 fs-6">{{ 'invite.location'|trans({'location': invite.event.location.name}, 'invites') }}</p>
-    <h5 class="mb-2">
-        <span class="badge bg-secondary position-relative">
-            {{ invite.fromUser.username }}
-            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                {{ invite.fromUser.raverScore }}
-                <span class="visually-hidden">raver-score</span>
+<div class="ravemap-index-spacer d-flex flex-row align-items-center justify-content-center flex-fill">
+    <div class="bg-black rounded-3 p-5 text-white text-center">
+        <h5>{{ 'invite.title'|trans({}, 'invites') }}</h5>
+        <img src="{{ path('ravemap_map_image_event', {'eventId': invite.event.id}) }}" class="rounded-circle" style="width: 150px; height: auto;" alt="{{ invite.event.name }}">
+        <h3 class="mt-1 mb-0">{{ invite.event.name }}</h3>
+        <p class="fst-italic mb-3 fs-6">{{ 'invite.location'|trans({'location': invite.event.location.name}, 'invites') }}</p>
+        <h5 class="mb-2">
+            <span class="badge bg-secondary position-relative">
+                {{ invite.fromUser.username }}
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    {{ invite.fromUser.raverScore }}
+                    <span class="visually-hidden">raver-score</span>
+                </span>
             </span>
-        </span>
-        <span style="padding-left: 20px">{{ 'invite.from_user'|trans({}, 'invites') }}</span>
-    </h5>
+            <span style="padding-left: 20px">{{ 'invite.from_user'|trans({}, 'invites') }}</span>
+        </h5>
 
-    <div class="btn-group mt-4" role="group" aria-label="{{ 'invite.choices.selection'|trans({}, 'invites') }}">
-        <a href="{{ path('ravemap_invite_accept', {'id': invite.id}) }}" class="btn btn-outline-dark text-success">{{ 'invite.choices.yes'|trans({}, 'invites') }}</a>
-        <a href="{{ path('ravemap_invite_deny', {'id': invite.id}) }}" class="btn btn-outline-dark text-danger">{{ 'invite.choices.no'|trans({}, 'invites') }}</a>
-        <a href="{{ path('ravemap_invite_maybe', {'id': invite.id}) }}" class="btn btn-outline-dark text-warning">{{ 'invite.choices.maybe'|trans({}, 'invites') }}</a>
+        <div class="btn-group mt-4" role="group" aria-label="{{ 'invite.choices.selection'|trans({}, 'invites') }}">
+            <a href="{{ path('ravemap_invite_accept', {'id': invite.id}) }}" class="btn btn-outline-dark text-success">{{ 'invite.choices.yes'|trans({}, 'invites') }}</a>
+            <a href="{{ path('ravemap_invite_deny', {'id': invite.id}) }}" class="btn btn-outline-dark text-danger">{{ 'invite.choices.no'|trans({}, 'invites') }}</a>
+            <a href="{{ path('ravemap_invite_maybe', {'id': invite.id}) }}" class="btn btn-outline-dark text-warning">{{ 'invite.choices.maybe'|trans({}, 'invites') }}</a>
+        </div>
     </div>
+</div>
 {% endblock %}

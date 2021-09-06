@@ -1,3 +1,6 @@
+{% if background is not defined %}
+    {% set background = true %}
+{% endif %}
 <!doctype html>
 <html lang="en" class="h-100">
 <head>
@@ -16,7 +19,7 @@
     <link rel="canonical" href="https://ravemap.tk/">
 
     <!-- Bootstrap core CSS -->
-    <link href="{{ asset('css/bootstrap.min.css') }}" type="text/css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
     <!-- Favicons -->
     <link rel="apple-touch-icon" href="{{ asset('img/logo/logo_small_icon_only_inverted.png') }}" sizes="180x180" />
@@ -47,30 +50,58 @@
     <link href="{{ asset('css/main.css') }}" type="text/css" rel="stylesheet" />
     <link href="{{ asset('css/style.css') }}" type="text/css" rel="stylesheet" />
 </head>
-<body class="d-flex h-100 text-center text-white bg-black">
+<body class="bg-body">
 
+{% if background %}
 <div style="position: fixed; z-index: -99; width: 100%; height: 100vh">
     <video id="backgroundVideo" width="100%" height="100%" autoplay muted>
         <source src="{{ asset('background_ravemap.mp4') }}" type="video/mp4">
     </video>
 </div>
+{% endif %}
 
+<header class="ravemap-header">
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container">
+            <a href="{{ path('homepage') }}">
+                <img src="{{ asset('img/logo/logo_white_large.png') }}" class="logo" alt="{{ app_name }}" />
+            </a>
 
-<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
-    <header class="mb-auto">
-        <div>
-            <div class="float-md-start mb-0">
-                <img src="{{ asset('img/logo/logo_white_large.png') }}" class="logo" />
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                    {% for page in main_nav_pages(app.request.locale) %}
+                        <li>
+                            <a href="{{ path('ravemap_static_page_by_slug', {'slug': page.slug}) }}" class="nav-link px-2 {% if page.slug in app.request.uri %}text-white{% else %}text-secondary{% endif %}">
+                                {{ page.title }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+
+                <div class="text-end">
+                    <a href="{{ path('fos_user_security_login') }}" class="btn btn-outline-light me-2">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Anmelden
+                    </a>
+                    <button type="button" class="btn btn-warning">
+                        <i class="fas fa-user"></i>
+                        Registrieren
+                    </button>
+                    {% if background %}
+                        <button type="button" id="mute" class="btn btn-outline-secondary">Unmute</button>
+                    {% endif %}
+                </div>
             </div>
-
-            <nav class="nav nav-masthead justify-content-center float-md-end">
-                <a class="nav-link" id="mute" aria-current="page" href="#">Unmute</a>
-            </nav>
-
         </div>
-    </header>
+    </nav>
+</header>
 
-    <main class="px-3">
+<main class="container">
+    {% if app.request.session.started %}
         {% for event in app.session.flashbag.get('event_accepted') %}
             <div class="alert alert-success" role="alert">
                 {{ 'invite.accepted'|trans({'event': event}, 'invites') }}
@@ -82,34 +113,58 @@
         {% for event in app.session.flashbag.get('event_maybe') %}
             {{ 'invite.maybe'|trans({'event': event}, 'invites') }}
         {% endfor %}
+    {% endif %}
 
 
-        {% block body %}{% endblock %}
-    </main>
+    {% block body %}{% endblock %}
+</main>
 
-    <footer class="mt-auto text-white-50">
-        <p>&copy; 2021 rav3map</p>
-    </footer>
-</div>
-
+<footer class="ravemap-footer d-flex flex-row justify-content-between ">
+    <div class="d-flex flex-row container text-light pt-5 pb-5">
+        <div class="d-flex flex-column">
+            <div>
+                <a href="{{ path('homepage') }}">
+                    <img src="{{ asset('img/logo/logo_small.png') }}" class="logo" alt="{{ app_name }}" />
+                </a>
+                <p class="mt-0 mb-0 text-light small-text">Made with &hearts; in Dortmund!</p>
+                <p class="mt-0 mb-0 text-light small-text">&copy; 2021. All righs reserved</p>
+            </div>
+        </div>
+        <div class="d-flex flex-column flex-fill container-fluid p-5 pt-0">
+            <h4 class="text-secondary mb-0">Menü</h4>
+            {% for page in footer_nav_pages(app.request.locale) %}
+                <a href="{{ path('ravemap_static_page_by_slug', {'slug': page.slug}) }}" class="small-text">{{ page.title }}</a>
+            {% endfor %}
+        </div>
+        <div class="d-flex">
+            <a href="#" class="text-dark fs-4">
+                <i class="fas fa-arrow-up"></i>
+            </a>
+        </div>
+    </div>
+</footer>
 
 <script src="{{ asset('js/jquery.min.js') }}"></script>
 <script src="{{ asset('js/jquery.flipper-responsive.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/c6574c4030.js" crossorigin="anonymous"></script>
 <script>
     jQuery(function($){
         $('#myFlipper').flipper('init');
 
-        $('#mute').on('click', (event) => {
-            event.preventDefault();
-            $('#backgroundVideo')[0].volume = 0.2;
-            $('#backgroundVideo')[0].muted = !($('#backgroundVideo')[0].muted);
+        {% if background %}
+            $('#mute').on('click', (event) => {
+                event.preventDefault();
+                $('#backgroundVideo')[0].volume = 0.2;
+                $('#backgroundVideo')[0].muted = !($('#backgroundVideo')[0].muted);
 
-            if ($('#backgroundVideo')[0].muted) {
-                $('#mute').text('Unmute');
-            } else {
-                $('#mute').text('Mute');
-            }
-        });
+                if ($('#backgroundVideo')[0].muted) {
+                    $('#mute').text('Unmute');
+                } else {
+                    $('#mute').text('Mute');
+                }
+            });
+        {% endif %}
     });
 </script>
 </body>

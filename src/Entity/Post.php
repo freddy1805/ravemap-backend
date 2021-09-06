@@ -125,4 +125,23 @@ class Post
     {
         return $this->timestamp;
     }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'author' => [
+                'id' => $this->author->getId(),
+                'username' => $this->author->getUsername(),
+                'image' => [
+                    'medium' => ''
+                ]
+            ],
+            'content' => $this->content,
+            'timestamp' => $this->timestamp->getTimestamp(),
+        ];
+    }
 }

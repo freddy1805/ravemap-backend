@@ -12,12 +12,20 @@ sonata_admin:
                 icon: '<i class="fa fa-cog"></i>'
                 items:
                     - admin.user
+                    - admin.locale
             content:
                 label: menu.content
                 label_catalogue: messages
                 icon: '<i class="fa fa-folder"></i>'
                 items:
                     - admin.event
+                    - admin.static
+            media:
+                label: menu.media
+                label_catalogue: messages
+                icon: '<i class="fa fa-picture-o" aria-hidden="true"></i>'
+                items:
+                    - sonata.media.admin.media
 
         blocks:
             - { type: sonata.admin.block.admin_list, position: left }
@@ -26,6 +34,7 @@ sonata_admin:
 
     templates:
         user_block: 'Admin/Block/user.html.twig'
+        layout: 'base_admin.html.twig'
 
 sonata_block:
     blocks:

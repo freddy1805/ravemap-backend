@@ -2,6 +2,12 @@
     "bacon/bacon-qr-code": {
         "version": "2.0.4"
     },
+    "cboden/ratchet": {
+        "version": "v0.4.3"
+    },
+    "cocur/slugify": {
+        "version": "v4.0.0"
+    },
     "composer/package-versions-deprecated": {
         "version": "1.11.99.2"
     },
@@ -87,11 +93,35 @@
     "endroid/qr-code-bundle": {
         "version": "4.0.4"
     },
+    "evenement/evenement": {
+        "version": "v3.0.1"
+    },
     "friendsofsymfony/user-bundle": {
         "version": "v2.1.2"
     },
     "gesdinet/jwt-refresh-token-bundle": {
         "version": "v0.12.0"
+    },
+    "gos/pubsub-router-bundle": {
+        "version": "v2.6.0"
+    },
+    "gos/web-socket-bundle": {
+        "version": "v3.11.0"
+    },
+    "gos/websocket-client": {
+        "version": "v1.4.0"
+    },
+    "guzzlehttp/guzzle": {
+        "version": "7.3.0"
+    },
+    "guzzlehttp/promises": {
+        "version": "1.4.1"
+    },
+    "guzzlehttp/psr7": {
+        "version": "1.8.2"
+    },
+    "imagine/imagine": {
+        "version": "1.2.4"
     },
     "jms/metadata": {
         "version": "2.5.1"
@@ -116,11 +146,17 @@
     "khanamiryan/qrcode-detector-decoder": {
         "version": "1.0.5.2"
     },
+    "knplabs/gaufrette": {
+        "version": "v0.9.0"
+    },
     "knplabs/knp-menu": {
         "version": "v3.2.0"
     },
     "knplabs/knp-menu-bundle": {
         "version": "v3.1.0"
+    },
+    "kriswallsmith/buzz": {
+        "version": "v0.16.1"
     },
     "lcobucci/clock": {
         "version": "2.0.0"
@@ -180,8 +216,59 @@
     "psr/container": {
         "version": "1.1.1"
     },
+    "psr/http-client": {
+        "version": "1.0.1"
+    },
+    "psr/http-factory": {
+        "version": "1.0.1"
+    },
+    "psr/http-message": {
+        "version": "1.0.1"
+    },
     "psr/log": {
         "version": "1.1.4"
+    },
+    "ralouphie/getallheaders": {
+        "version": "3.0.3"
+    },
+    "ratchet/rfc6455": {
+        "version": "v0.3"
+    },
+    "react/cache": {
+        "version": "v1.1.1"
+    },
+    "react/dns": {
+        "version": "v1.8.0"
+    },
+    "react/event-loop": {
+        "version": "v1.2.0"
+    },
+    "react/promise": {
+        "version": "v2.8.0"
+    },
+    "react/promise-timer": {
+        "version": "v1.7.0"
+    },
+    "react/socket": {
+        "version": "v1.9.0"
+    },
+    "react/stream": {
+        "version": "v1.2.0"
+    },
+    "redjanym/fcm-bundle": {
+        "version": "1.1",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "1.1",
+            "ref": "459fa76d53b57a5feb20ac8f9153f54bff9866b6"
+        },
+        "files": [
+            "config/packages/redjan_ym_fcm.yaml"
+        ]
+    },
+    "redjanym/php-firebase-cloud-messaging": {
+        "version": "v1.1.6"
     },
     "sonata-project/admin-bundle": {
         "version": "3.64",
@@ -197,6 +284,15 @@
     },
     "sonata-project/cache": {
         "version": "2.0.1"
+    },
+    "sonata-project/core-bundle": {
+        "version": "3.9",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "3.9",
+            "ref": "2f69bd1995730b73a5211a9707622fb25a925df7"
+        }
     },
     "sonata-project/doctrine-extensions": {
         "version": "1.13.1"
@@ -215,6 +311,20 @@
             "version": "1.4",
             "ref": "9c8a1e8ce2b1f215015ed16652c4ed18eb5867fd"
         }
+    },
+    "sonata-project/media-bundle": {
+        "version": "3.13",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "3.13",
+            "ref": "e25412e53b20827db07abb6f2aa0b8e4d26c284c"
+        },
+        "files": [
+            "config/packages/sonata_media.yaml",
+            "config/routes/sonata_media.yaml",
+            "public/upload/media/.gitignore"
+        ]
     },
     "sonata-project/twig-extensions": {
         "version": "1.7.0"
@@ -343,6 +453,18 @@
             "ref": "fadbfe33303a76e25cb63401050439aa9b1a9c7f"
         }
     },
+    "symfony/messenger": {
+        "version": "4.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "4.3",
+            "ref": "25e3c964d3aee480b3acc3114ffb7940c89edfed"
+        },
+        "files": [
+            "config/packages/messenger.yaml"
+        ]
+    },
     "symfony/mime": {
         "version": "v4.4.27"
     },
@@ -421,6 +543,9 @@
         "version": "v4.4.27"
     },
     "symfony/security-http": {
+        "version": "v4.4.27"
+    },
+    "symfony/serializer": {
         "version": "v4.4.27"
     },
     "symfony/service-contracts": {
@@ -517,6 +642,18 @@
     },
     "symfony/yaml": {
         "version": "v4.4.29"
+    },
+    "twig/extensions": {
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "1.0",
+            "ref": "a86723ee8d8b2f9437c8ce60a5546a1c267da5ed"
+        },
+        "files": [
+            "config/packages/twig_extensions.yaml"
+        ]
     },
     "twig/string-extra": {
         "version": "v3.3.1"

@@ -2,8 +2,12 @@
 ### SONATA TRANSLATIONS ###
 User List: Nutzer
 User Create: Neuen Nutzer anlegen
+Locale List: Sprachen
+Locale Create: Neue Sprache anlegen
 Event List: Veranstaltungen
 Event Create: Neue Veranstaltung anlegen
+Static Page List: Statische Seiten
+Static Page Create: Neue Seite
 ###########################
 
 ### BASE APP TRANSLATIONS ###
@@ -32,6 +36,7 @@ user:
   title: Nutzer
   create: Neuen Nutzer erstellen
   id: Id
+  image: Profilbild
   username: Nutzername
   display_name: Öffentlicher Name
   email: E-Mail
@@ -39,6 +44,7 @@ user:
   password: Passwort
   enabled: Konto aktiv
   last_login: Zul. eingeloggt
+  registered_at: Registriert am
   actions: Schenllzugriff
   tab:
     meta: Metainformation
@@ -87,3 +93,33 @@ location:
   placeholder: Wird automatisch, anhand der Koordinaten, von Google Maps geladen
   lat: Breitengrad
   long: Längengrad
+
+
+static_page:
+  title: Statische Seiten
+  create: Neue Seite
+  locale: Sprache
+  title_content: Seitentitel
+  slug: Slug
+  slug_help: Der Slug wird automatisch generiert
+  content: Inhalt
+  nav_position: Position in Navigation
+  in_main_nav: In Haupt-Navigation anzeigen
+  in_footer_nav: In Footer-Navigation anzeigen
+  tab:
+    meta: Allgemein
+    nav: Navigation
+    seo: SEO
+  block:
+    meta: Dokument
+    nav: Navigation
+    seo: SEO
+
+locale:
+  title: Sprachen
+  create: Neue Sprache anlegen
+  name: Bezeichnung
+  locale_id: Sprachkürzel
+  locale_id_help: z.B. de = Deutsch, en = Englisch
+  enabled: Freigabe
+  enabled_help: Über die Freigabe werden alle Seiten die diese Sprache nutzen entweder aktiviert oder deaktiviert

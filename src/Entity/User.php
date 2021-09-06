@@ -44,14 +44,6 @@ class User extends BaseUser
     protected $email;
 
     /**
-     * @ORM\OneToMany (targetEntity="App\Entity\Invite", mappedBy="toUser")
-     * @Serializer\Groups({
-     *     "user_detail"
-     * })
-     */
-    protected $invites;
-
-    /**
      * @var int
      * @ORM\Column(type="integer", nullable=false)
      * @Serializer\Groups({
@@ -62,20 +54,47 @@ class User extends BaseUser
     protected $raverScore;
 
     /**
-     * @var Event[]
-     * @Serializer\Groups({
-     *     "user_detail"
-     * })
-     */
-    protected $createdEvents = [];
-
-    /**
      * @var string
      * @Serializer\Groups({
      *     "user_detail"
      * })
      */
     protected $lastLogin;
+
+    /**
+     * @var \DateTime
+     * @ORM\Column(type="datetime", nullable=false)
+     * @Serializer\Groups({
+     *     "user_detail"
+     * })
+     */
+    protected $registeredAt;
+
+    /**
+     * @var Media
+     * @ORM\ManyToOne(targetEntity="App\Entity\Media", cascade={"persist"})
+     * @ORM\JoinColumn(name="media_id", referencedColumnName="id", onDelete="SET NULL")
+     * @Serializer\Groups({
+     *     "user_detail"
+     * })
+     */
+    protected $image;
+
+    /**
+     * @ORM\OneToMany (targetEntity="App\Entity\Invite", mappedBy="toUser")
+     * @Serializer\Groups({
+     *     "user_detail"
+     * })
+     */
+    protected $invites;
+
+    /**
+     * @var Event[]
+     * @Serializer\Groups({
+     *     "user_detail"
+     * })
+     */
+    protected $createdEvents = [];
 
     /**
      * User constructor.
@@ -86,6 +105,7 @@ class User extends BaseUser
 
         $this->invites = new ArrayCollection();
         $this->raverScore = 0;
+        $this->registeredAt = new \DateTime();
     }
 
     public function getId(): ?string
@@ -161,5 +181,51 @@ class User extends BaseUser
         $this->createdEvents = $createdEvents;
 
         return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getRegisteredAt(): \DateTime
+    {
+        return $this->registeredAt;
+    }
+
+    /**
+     * @param \DateTime $registeredAt
+     * @return User
+     */
+    public function setRegisteredAt(\DateTime $registeredAt): self
+    {
+        $this->registeredAt = $registeredAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Media
+     */
+    public function getImage(): ?Media
+    {
+        return $this->image;
+    }
+
+    /**
+     * @param Media|null $image
+     * @return User
+     */
+    public function setImage(?Media $image): self
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return $this->username;
     }
 }

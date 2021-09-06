@@ -1,0 +1,35 @@
+sonata_media:
+    default_context: default
+    db_driver: doctrine_orm
+    class:
+        media: App\Entity\Media
+        gallery: App\Entity\MediaGallery
+        gallery_has_media: App\Entity\MediaGalleryHasMedia
+    contexts:
+        default:
+            providers:
+                - sonata.media.provider.image
+                - sonata.media.provider.file
+            formats:
+                small: { width: 50 , quality: 70}
+                medium: { width: 150 , quality: 70}
+                large: { width: 250 , quality: 70}
+                very_large: { width: 500 , quality: 70}
+        user_image:
+            providers:
+                - sonata.media.provider.image
+            formats:
+                small: { width: 50, height: 50, quality: 70 }
+                medium: { width: 150, height: 150, quality: 70 }
+                large: { width: 250, height: 250, quality: 70 }
+                very_large: { width: 500, height: 500, quality: 70 }
+
+    cdn:
+        server:
+            path: /upload/media
+
+    filesystem:
+        local:
+            # Directory for uploads should be writable
+            directory: "%kernel.project_dir%/public/upload/media"
+            create: true
