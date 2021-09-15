@@ -68,8 +68,8 @@ class EventManager extends BaseManager {
         $this->imageProvider = $imageProvider;
         $this->messageBus = $messageBus;
 
-        $cacheClient = RedisAdapter::createConnection('redis://localhost');
-        $this->cache = new RedisAdapter($cacheClient);
+        //$cacheClient = RedisAdapter::createConnection('redis://localhost');
+        $this->cache = new ApcuAdapter();
     }
 
     /**
