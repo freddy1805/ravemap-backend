@@ -92,6 +92,21 @@ class BaseManager implements ManagerInterface {
     }
 
     /**
+     * @param object $object
+     * @return bool
+     */
+    public function remove(object $object): bool
+    {
+        try {
+            $this->entityManager->remove($object);
+            $this->entityManager->flush();
+            return true;
+        } catch (\Exception $exception) {
+            return false;
+        }
+    }
+
+    /**
      * @param array $data
      * @return object
      * @throws ValidationException

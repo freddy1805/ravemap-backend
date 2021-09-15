@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=LocaleRepository::class)
+ * @ORM\Table(name="ravemap__locale")
  */
 class Locale
 {

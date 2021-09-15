@@ -31,6 +31,12 @@ interface ManagerInterface {
     public function save(object $object): bool;
 
     /**
+     * @param object $object
+     * @return bool
+     */
+    public function remove(object $object): bool;
+
+    /**
      * @return string
      */
     public function getEntityClass(): string;

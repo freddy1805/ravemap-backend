@@ -3,11 +3,13 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
 use JMS\Serializer\Annotation as Serializer;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -62,7 +64,7 @@ class User extends BaseUser
     protected $lastLogin;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      * @ORM\Column(type="datetime", nullable=false)
      * @Serializer\Groups({
      *     "user_detail"
@@ -81,7 +83,7 @@ class User extends BaseUser
     protected $image;
 
     /**
-     * @ORM\OneToMany (targetEntity="App\Entity\Invite", mappedBy="toUser")
+     * @ORM\OneToMany(targetEntity="App\Entity\Invite", mappedBy="toUser")
      * @Serializer\Groups({
      *     "user_detail"
      * })
@@ -97,6 +99,22 @@ class User extends BaseUser
     protected $createdEvents = [];
 
     /**
+     * @var User[]
+     * @ORM\ManyToMany(targetEntity="User", mappedBy="friends")
+     */
+    protected $friendsWithMe;
+
+    /**
+     * @var User[]
+     * @ORM\ManyToMany(targetEntity="User", inversedBy="friendsWithMe")
+     * @ORM\JoinTable(name="ravemap__friends",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="friend_user_id", referencedColumnName="id")}
+     *      )
+     */
+    protected $friends;
+
+    /**
      * User constructor.
      */
     public function __construct()
@@ -105,7 +123,10 @@ class User extends BaseUser
 
         $this->invites = new ArrayCollection();
         $this->raverScore = 0;
-        $this->registeredAt = new \DateTime();
+        $this->registeredAt = new DateTime();
+
+        $this->friendsWithMe = new ArrayCollection();
+        $this->friends = new ArrayCollection();
     }
 
     public function getId(): ?string
@@ -184,18 +205,18 @@ class User extends BaseUser
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
-    public function getRegisteredAt(): \DateTime
+    public function getRegisteredAt(): DateTime
     {
         return $this->registeredAt;
     }
 
     /**
-     * @param \DateTime $registeredAt
+     * @param DateTime $registeredAt
      * @return User
      */
-    public function setRegisteredAt(\DateTime $registeredAt): self
+    public function setRegisteredAt(DateTime $registeredAt): self
     {
         $this->registeredAt = $registeredAt;
 
@@ -217,6 +238,70 @@ class User extends BaseUser
     public function setImage(?Media $image): self
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * @return User[]|Collection
+     */
+    public function getFriends()
+    {
+        return $this->friends;
+    }
+
+    /**
+     * @param UserInterface $user
+     * @return User
+     */
+    public function addFriend(UserInterface $user): self
+    {
+        if (!$this->friends->contains($user)) {
+            $this->friends->add($user);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param UserInterface $user
+     * @return User
+     */
+    public function removeFriend(UserInterface $user): self
+    {
+        $this->friends->removeElement($user);
+
+        return $this;
+    }
+
+    /**
+     * @return User[]|Collection
+     */
+    public function getFriendsWithMe()
+    {
+        return $this->friendsWithMe;
+    }
+
+    /**
+     * @param UserInterface $user
+     * @return User
+     */
+    public function addFriendWithMe(UserInterface $user): self
+    {
+        if (!$this->friendsWithMe->contains($user)) {
+            $this->friendsWithMe->add($user);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param UserInterface $user
+     * @return User
+     */
+    public function removeFriendWithMe(UserInterface $user): self
+    {
+        $this->friendsWithMe->removeElement($user);
 
         return $this;
     }

@@ -27,3 +27,7 @@
 .ravemap-info {
     background: linear-gradient(45deg, #2c307bdb, #b70ae2a3);
 }
+
+.bg-black {
+    background-color: #000 !important;
+}

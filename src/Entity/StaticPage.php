@@ -14,49 +14,49 @@ class StaticPage
 {
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="string")
+     * @ORM\GeneratedValue(strategy="UUID")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var Locale
      * @ORM\ManyToOne(targetEntity="App\Entity\Locale")
      * @ORM\JoinColumn(name="locale_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    private $locale;
+    protected $locale;
 
     /**
      * @ORM\Column(type="text")
      */
-    private $title;
+    protected $title;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $slug;
+    protected $slug;
 
     /**
      * @var int
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $navPosition;
+    protected $navPosition;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $inFooterNav = false;
+    protected $inFooterNav = false;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $inMainNav = false;
+    protected $inMainNav = false;
 
     /**
      * @ORM\Column(type="text")
      */
-    private $content;
+    protected $content;
 
     public function getId(): ?string
     {

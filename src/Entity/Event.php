@@ -91,6 +91,10 @@ class Event
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Invite", mappedBy="event")
      * @ORM\JoinTable(name="ravemap__event_invites")
+     * @ORM\OrderBy({"status" = "ASC"})
+     * @Serializer\Groups({
+     *     "event_invites"
+     * })
      */
     private $invites;
 
@@ -137,6 +141,12 @@ class Event
     private $eventMode;
 
     /**
+     * @var array
+     * @ORM\Column(type="array")
+     */
+    private $route;
+
+    /**
      * Event constructor.
      * @param string|null $name
      */
@@ -153,6 +163,7 @@ class Event
         $this->posts = new ArrayCollection();
         $this->maxInvites = 50;
         $this->eventMode = self::MODE_INVITE;
+        $this->route = [];
     }
 
     public function getId(): ?string
@@ -347,6 +358,25 @@ class Event
     public function setEventMode(int $eventMode): self
     {
         $this->eventMode = $eventMode;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getRoute(): array
+    {
+        return $this->route;
+    }
+
+    /**
+     * @param array $route
+     * @return Event
+     */
+    public function setRoute(array $route): self
+    {
+        $this->route = $route;
 
         return $this;
     }

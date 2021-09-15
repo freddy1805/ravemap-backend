@@ -2,6 +2,7 @@
 
 namespace App\Controller\Api;
 
+use App\Entity\Event;
 use App\Service\Entity\EventManager;
 use App\Service\Entity\UserManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -12,6 +13,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use OpenApi\Annotations as OA;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 /**
  * Class EventController
@@ -83,6 +85,31 @@ class EventController extends BaseApiController {
         }
 
         return new Response($this->serializeToJson($event, ['event_location']), 200, [
+            'content-type' => self::JSON_CONTENT_TYPE
+        ]);
+    }
+
+    /**
+     * @OA\Get(
+     *     operationId="getInvites",
+     *     summary="Get detailed event invite data",
+     *     tags={"Event"},
+     *     @OA\Response(response="200", description="Returns json object with detailed event invites data"),
+     *     @OA\Response(response="401", description="Login faild. Invalid credentials")
+     * )
+     * @Route("/{id}/invites", name="invites", methods={"GET"})
+     * @param string $id
+     * @return Response
+     */
+    public function invitesAction(string $id): Response
+    {
+        $event = $this->eventManager->getById($id);
+
+        if (!$event) {
+            throw new NotFoundHttpException('Event not found');
+        }
+
+        return new Response($this->serializeToJson($event, ['event_invites', 'invite_detail', 'user_list']), 200, [
             'content-type' => self::JSON_CONTENT_TYPE
         ]);
     }
@@ -171,5 +198,36 @@ class EventController extends BaseApiController {
         }
 
         throw new BadRequestHttpException();
+    }
+
+
+    /**
+     * @OA\Delete (
+     *     operationId="removeEvent",
+     *     summary="Remove an event",
+     *     tags={"Event"},
+     *     @OA\Response(response="201", description="Returns the removal status"),
+     *     @OA\Response(response="401", description="Login faild. Invalid credentials")
+     * )
+     * @Route("/{id}", name="remove", methods={"DELETE"})
+     */
+    public function removeEventAction(string $id): Response
+    {
+        /** @var Event $event */
+        $event = $this->eventManager->getById($id);
+
+        if (!$event) {
+            throw new NotFoundHttpException('Event not found');
+        }
+
+        if ($event->getCreator() !== $this->getUser()) {
+            throw new AuthenticationException('You are not the owner of this event');
+        }
+
+        return new Response($this->serializeToJson([
+            'success' => $this->eventManager->remove($event),
+        ], ['remove_event']), 200, [
+            'content-type' => self::JSON_CONTENT_TYPE,
+        ]);
     }
 }

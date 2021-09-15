@@ -7,6 +7,7 @@ use App\Entity\Invite;
 use App\Entity\Post;
 use App\Entity\User;
 use App\Exception\ValidationException;
+use App\Message\EventRemovedMessage;
 use App\Service\GeolocationService;
 use App\Util\EntityMapper;
 use Doctrine\ORM\EntityManagerInterface;
@@ -15,6 +16,9 @@ use Psr\Cache\InvalidArgumentException;
 use Sonata\MediaBundle\Provider\ImageProvider;
 use Symfony\Component\Cache\Adapter\ApcuAdapter;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Symfony\Component\Cache\Adapter\RedisAdapter;
+use Symfony\Component\Messenger\MessageBus;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
@@ -41,24 +45,31 @@ class EventManager extends BaseManager {
 
     private CacheInterface $cache;
 
+    private MessageBusInterface $messageBus;
+
     /**
      * EventManager constructor.
      * @param EntityManagerInterface $entityManager
      * @param GeolocationService $geolocationService
      * @param InviteManager $inviteManager
      * @param ImageProvider $imageProvider
+     * @param MessageBusInterface $messageBus
      */
     public function __construct(
         EntityManagerInterface $entityManager,
         GeolocationService $geolocationService,
         InviteManager $inviteManager,
-        ImageProvider $imageProvider
+        ImageProvider $imageProvider,
+        MessageBusInterface $messageBus
     ) {
         parent::__construct($entityManager);
         $this->geolocationService = $geolocationService;
         $this->inviteManager = $inviteManager;
         $this->imageProvider = $imageProvider;
-        $this->cache = new ApcuAdapter();
+        $this->messageBus = $messageBus;
+
+        $cacheClient = RedisAdapter::createConnection('redis://localhost');
+        $this->cache = new RedisAdapter($cacheClient);
     }
 
     /**
@@ -183,6 +194,33 @@ class EventManager extends BaseManager {
             $this->entityManager->flush();
             return true;
         } catch (Exception $exception) {
+            return false;
+        }
+    }
+
+    /**
+     * @param Event|object $object
+     * @return bool
+     */
+    public function remove(object $object): bool
+    {
+        $eventId = $object->getId();
+
+        try {
+            foreach ($object->getInvites() as $invite) {
+                $this->entityManager->remove($invite);
+            }
+
+            foreach ($object->getPosts() as $post) {
+                $this->entityManager->remove($post);
+            }
+
+            $this->entityManager->remove($object);
+            $this->entityManager->flush();
+
+            $this->messageBus->dispatch(new EventRemovedMessage($object, $eventId));
+            return true;
+        } catch (\Exception $exception) {
             return false;
         }
     }
