@@ -137,16 +137,12 @@ class UserController extends BaseApiController {
                 $file = $uploadedFile;
             }
 
-
-            throw new NotFoundHttpException($file->getRealPath());
-
             if (!$file) {
                 throw new NotFoundHttpException('binaryContent not found');
             }
 
             $user = $this->getUser();
             $media = $this->saveImageMediaBundle($file, $user);
-
 
             $this->userManager->update($user, [
                 'image' => $media
@@ -156,9 +152,7 @@ class UserController extends BaseApiController {
                 'content-type' => self::JSON_CONTENT_TYPE
             ]);
         } catch (\RuntimeException | NotFoundHttpException | \InvalidArgumentException $ex ) {
-
             throw $ex;
-
             return new Response($this->serializeToJson(['error' => 'Coud not upload image'], ['upload_error']), 400, [
                 'content-type' => self::JSON_CONTENT_TYPE
             ]);
