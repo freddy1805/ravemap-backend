@@ -77,6 +77,7 @@ class User extends BaseUser
      * @ORM\ManyToOne(targetEntity="App\Entity\Media", cascade={"persist"})
      * @ORM\JoinColumn(name="media_id", referencedColumnName="id", onDelete="SET NULL")
      * @Serializer\Groups({
+     *     "user_image",
      *     "user_detail"
      * })
      */

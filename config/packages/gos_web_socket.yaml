@@ -7,7 +7,7 @@ gos_web_socket:
         session_handler: Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler
   server:
     # The host IP address on the server which connections for the websocket server are accepted.
-    host: 127.0.0.1
+    host: ~
     # The port on the server which connections for the websocket server are accepted.
     port: 1234
     router:

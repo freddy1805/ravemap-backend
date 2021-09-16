@@ -109,7 +109,7 @@ class EventController extends BaseApiController {
             throw new NotFoundHttpException('Event not found');
         }
 
-        return new Response($this->serializeToJson($event, ['event_invites', 'invite_detail', 'user_list']), 200, [
+        return new Response($this->serializeToJson($event, ['event_invites', 'invite_detail', 'user_list', 'user_image']), 200, [
             'content-type' => self::JSON_CONTENT_TYPE
         ]);
     }
