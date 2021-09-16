@@ -153,6 +153,9 @@ class UserController extends BaseApiController {
                 'content-type' => self::JSON_CONTENT_TYPE
             ]);
         } catch (\RuntimeException | NotFoundHttpException | \InvalidArgumentException $ex ) {
+
+            throw $ex;
+
             return new Response($this->serializeToJson(['error' => 'Coud not upload image'], ['upload_error']), 400, [
                 'content-type' => self::JSON_CONTENT_TYPE
             ]);
