@@ -14,8 +14,8 @@ class StaticPage
 {
     /**
      * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue
+     * @ORM\Column(type="string")
+     * @ORM\GeneratedValue(strategy="UUID")
      */
     protected $id;
 
@@ -38,8 +38,7 @@ class StaticPage
 
     /**
      * @var int
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
     protected $navPosition;
 
@@ -54,7 +53,7 @@ class StaticPage
     protected $inMainNav = false;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
     protected $content;
 
