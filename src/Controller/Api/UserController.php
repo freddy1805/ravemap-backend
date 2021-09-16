@@ -137,6 +137,9 @@ class UserController extends BaseApiController {
                 $file = $uploadedFile;
             }
 
+
+            throw new NotFoundHttpException($file->getSize());
+
             if (!$file) {
                 throw new NotFoundHttpException('binaryContent not found');
             }
