@@ -14,10 +14,12 @@ use Sonata\MediaBundle\Provider\MediaProviderInterface;
 use Sonata\MediaBundle\Provider\Pool;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use OpenApi\Annotations as OA;
@@ -131,22 +133,21 @@ class UserController extends BaseApiController {
     public function updateImageAction(Request $request): Response
     {
         try {
-            $file = null;
-            /** @var UploadedFile $uploadedFile */
-            foreach ($request->files as $uploadedFile) {
-                $file = $uploadedFile;
-            }
+            $base64 = $request->get('base64');
 
-            if (!$file) {
-                throw new NotFoundHttpException('binaryContent not found');
+            if (!$base64) {
+                throw new BadRequestHttpException('base64 image not found');
             }
 
             $user = $this->getUser();
-            $media = $this->saveImageMediaBundle($file, $user);
 
-            $this->userManager->update($user, [
-                'image' => $media
-            ], true);
+            if ($uploadedFile = $this->base64ToJpeg($base64)) {
+                $media = $this->saveImageMediaBundle($uploadedFile, $user);
+
+                $this->userManager->update($user, [
+                    'image' => $media
+                ], true);
+            }
 
             return new Response($this->serializeToJson($user, ['user_detail']), 200, [
                 'content-type' => self::JSON_CONTENT_TYPE
@@ -175,5 +176,23 @@ class UserController extends BaseApiController {
         $this->mediaManager->save($media);
 
         return $media;
+    }
+
+    /**
+     * @param string $base64
+     * @return UploadedFile|null
+     */
+    protected function base64ToJpeg(string $base64): ?UploadedFile
+    {
+        if (empty($base64)) {
+            return null;
+        }
+
+        $temp = tmpfile();
+        $data = explode( ',', $base64 );
+        fwrite( $temp, base64_decode($data[1]));
+        $path = stream_get_meta_data($temp)['uri'];
+
+        return new UploadedFile($path, md5(date('Y-m-d H:i:s')));
     }
 }
