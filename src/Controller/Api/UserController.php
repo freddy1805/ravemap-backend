@@ -199,7 +199,7 @@ class UserController extends BaseApiController {
 
         $temp = tmpfile();
         $data = explode( ',', $base64 );
-        fwrite( $temp, base64_decode($data[1]));
+        fwrite( $temp, base64_decode($data[0]));
         $path = stream_get_meta_data($temp)['uri'];
 
         return new UploadedFile($path, md5(date('Y-m-d H:i:s')));
