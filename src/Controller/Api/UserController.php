@@ -133,9 +133,10 @@ class UserController extends BaseApiController {
     public function updateImageAction(Request $request): Response
     {
         try {
-            $base64 = $request->get('base64');
+            $data = json_decode($request->getContent(), true);
+            $base64 = $data['base64'];
 
-            if (!$base64) {
+            if (empty($base64)) {
                 throw new BadRequestHttpException('base64 image not found');
             }
 
