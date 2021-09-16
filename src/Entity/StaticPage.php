@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\StaticPageRepository;
 use App\Util\EntityMapper;
 use Doctrine\ORM\Mapping as ORM;
+use phpDocumentor\Reflection\Types\Integer;
 
 /**
  * @ORM\Entity(repositoryClass=StaticPageRepository::class)
@@ -14,8 +15,8 @@ class StaticPage
 {
     /**
      * @ORM\Id
-     * @ORM\Column(type="string")
-     * @ORM\GeneratedValue(strategy="UUID")
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue
      */
     protected $id;
 
@@ -57,7 +58,7 @@ class StaticPage
      */
     protected $content;
 
-    public function getId(): ?string
+    public function getId(): ?int
     {
         return $this->id;
     }
