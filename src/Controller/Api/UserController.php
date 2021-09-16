@@ -138,7 +138,7 @@ class UserController extends BaseApiController {
             }
 
 
-            throw new NotFoundHttpException($file->getSize());
+            throw new NotFoundHttpException($file->getRealPath());
 
             if (!$file) {
                 throw new NotFoundHttpException('binaryContent not found');
