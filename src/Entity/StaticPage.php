@@ -14,8 +14,8 @@ class StaticPage
 {
     /**
      * @ORM\Id
-     * @ORM\Column(type="string")
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue
      */
     protected $id;
 
