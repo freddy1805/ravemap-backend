@@ -191,6 +191,9 @@ class UserController extends BaseApiController
         $media->setBinaryContent($file);
         $this->mediaManager->save($media);
 
+        $fs = new Filesystem();
+        $fs->remove($file);
+
         return $media;
     }
 
@@ -222,7 +225,7 @@ class UserController extends BaseApiController
         }
 
         // Specify the location where you want to save the image
-        $img_file = $this->tempUserImagePath . md5(date('Y-m-d H:i:s')) . '.png';
+        $img_file = $this->tempUserImagePath . DIRECTORY_SEPARATOR . md5(date('Y-m-d H:i:s')) . '.png';
 
         // Save the GD resource as PNG in the best possible quality (no compression)
         // This will strip any metadata or invalid contents (including, the PHP backdoor)
