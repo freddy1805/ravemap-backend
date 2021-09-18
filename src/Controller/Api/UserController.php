@@ -198,7 +198,7 @@ class UserController extends BaseApiController
      * @param string $base64
      * @return UploadedFile|null
      */
-    protected function base64ToJpeg(string $base64): ?UploadedFile
+    protected function base64ToJpeg(string $base64): ?File
     {
         if (empty($base64)) {
             return null;
