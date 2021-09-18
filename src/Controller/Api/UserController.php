@@ -13,9 +13,10 @@ use Sonata\MediaBundle\Model\MediaManagerInterface;
 use Sonata\MediaBundle\Provider\MediaProviderInterface;
 use Sonata\MediaBundle\Provider\Pool;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,7 +32,8 @@ use Symfony\Component\Validator\Constraints\Json;
  * @package App\Controller\Api
  * @Route("/user", name="reavemap_api_user_")
  */
-class UserController extends BaseApiController {
+class UserController extends BaseApiController
+{
 
     private UserManager $userManager;
 
@@ -42,6 +44,8 @@ class UserController extends BaseApiController {
     private FormFactoryInterface $formFactory;
 
     private Pool $mediaPool;
+
+    private string $tempUserImagePath;
 
     /**
      * UserController constructor.
@@ -56,14 +60,17 @@ class UserController extends BaseApiController {
         UserManager $userManager,
         EventManager $eventManager,
         FormFactoryInterface $factory,
-        Pool $mediaPool
-    ) {
+        Pool $mediaPool,
+        ParameterBagInterface $parameterBag
+    )
+    {
         parent::__construct($container);
         $this->userManager = $userManager;
         $this->eventManager = $eventManager;
         $this->formFactory = $factory;
         $this->mediaManager = $container->get('sonata.media.manager.media');
         $this->mediaPool = $mediaPool;
+        $this->tempUserImagePath = $parameterBag->get('kernel.project_dir') . '/var/temp';
     }
 
     /**
@@ -150,8 +157,8 @@ class UserController extends BaseApiController {
 
             $user = $this->getUser();
 
-            if ($uploadedFile = $this->base64ToJpeg($base64)) {
-                $media = $this->saveImageMediaBundle($uploadedFile, $user);
+            if ($file = $this->base64ToJpeg($base64)) {
+                $media = $this->saveImageMediaBundle($file, $user);
 
                 $this->userManager->update($user, [
                     'image' => $media
@@ -161,7 +168,7 @@ class UserController extends BaseApiController {
             return new Response($this->serializeToJson($user, ['user_detail']), 200, [
                 'content-type' => self::JSON_CONTENT_TYPE
             ]);
-        } catch (\RuntimeException | NotFoundHttpException | \InvalidArgumentException $ex ) {
+        } catch (\RuntimeException | NotFoundHttpException | \InvalidArgumentException $ex) {
             throw $ex;
             return new Response($this->serializeToJson(['error' => 'Coud not upload image'], ['upload_error']), 400, [
                 'content-type' => self::JSON_CONTENT_TYPE
@@ -174,7 +181,7 @@ class UserController extends BaseApiController {
      * @param UserInterface $user
      * @return Media
      */
-    protected function saveImageMediaBundle(UploadedFile $file, UserInterface $user): Media
+    protected function saveImageMediaBundle(File $file, UserInterface $user): Media
     {
         $media = new Media();
         $media->setName($file->getClientOriginalName());
@@ -197,11 +204,31 @@ class UserController extends BaseApiController {
             return null;
         }
 
-        $temp = tmpfile();
-        $data = explode( ',', $base64 );
-        fwrite($temp, $data[0]);
-        $path = stream_get_meta_data($temp)['uri'];
+        $fs = new Filesystem();
 
-        return new UploadedFile($path, md5(date('Y-m-d H:i:s')) . '.jpg');
+        if (!is_dir($this->tempUserImagePath)) {
+            $fs->mkdir($this->tempUserImagePath);
+        }
+
+        $bin = base64_decode($base64);
+
+        // Load GD resource from binary data
+        $im = imageCreateFromString($bin);
+
+        // Make sure that the GD library was able to load the image
+        // This is important, because you should not miss corrupted or unsupported images
+        if (!$im) {
+            throw new \Exception('base64 value is not a valid image');
+        }
+
+        // Specify the location where you want to save the image
+        $img_file = $this->tempUserImagePath . md5(date('Y-m-d H:i:s')) . '.png';
+
+        // Save the GD resource as PNG in the best possible quality (no compression)
+        // This will strip any metadata or invalid contents (including, the PHP backdoor)
+        // To block any possible exploits, consider increasing the compression level
+        imagepng($im, $img_file, 0);
+
+        return new File($img_file);
     }
 }
