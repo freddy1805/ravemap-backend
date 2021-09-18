@@ -184,7 +184,7 @@ class UserController extends BaseApiController
     protected function saveImageMediaBundle(File $file, UserInterface $user): Media
     {
         $media = new Media();
-        $media->setName($file->getClientOriginalName());
+        $media->setName($file->getFilename());
         $media->setContext('user_image');
         $media->setAuthorName($user->getUsername());
         $media->setProviderName('sonata.media.provider.image');
