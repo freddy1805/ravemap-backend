@@ -169,11 +169,64 @@ class UserController extends BaseApiController
                 'content-type' => self::JSON_CONTENT_TYPE
             ]);
         } catch (\RuntimeException | NotFoundHttpException | \InvalidArgumentException $ex) {
-            throw $ex;
             return new Response($this->serializeToJson(['error' => 'Coud not upload image'], ['upload_error']), 400, [
                 'content-type' => self::JSON_CONTENT_TYPE
             ]);
         }
+    }
+
+    /**
+     * @OA\Post(
+     *     operationId="addFriend",
+     *     summary="Add friend to own user",
+     *     tags={"User"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *              title="AddFriendObject",
+     *              type="object",
+     *              @OA\Property(property="user-id", type="string", example="3782b-23ji2h-iji23-3434p"),
+     *         )
+     *     ),
+     *     @OA\Response(response="200", description="Returns the updated user"),
+     *     @OA\Response(response="401", description="Login faild. Invalid credentials")
+     * )
+     * @Route("/friend/add", name="add_friend", methods={"POST"})
+     */
+    public function addFriendAction(Request $request): Response
+    {
+        $data = json_decode($request->getContent(), true);
+        $friendId = $data['user-id'];
+
+        /** @var User $user */
+        $user = $this->getUser();
+
+        /** @var User $friend */
+        if ($friend = $this->userManager->getById($friendId)) {
+            $friend->addFriend($user);
+            $friend->addFriendWithMe($user);
+            $user->addFriend($friend);
+            $user->addFriendWithMe($friend);
+
+
+            if ($this->userManager->save($friend) && $this->userManager->save($user)) {
+                return new Response($this->serializeToJson($user, ['user_detail']), 200, [
+                    'content-type' => self::JSON_CONTENT_TYPE,
+                ]);
+            }
+
+            return new Response($this->serializeToJson([
+                'error' => 'user.friend_or_user_not_saved'
+            ], ['error-not-saved']), 500, [
+                'content-type' => self::JSON_CONTENT_TYPE,
+            ]);
+        }
+
+        return new Response($this->serializeToJson([
+            'error' => 'user.friend_id_not_found',
+        ], ['error-not-found']), 404, [
+            'content-type' => self::JSON_CONTENT_TYPE
+        ]);
     }
 
     /**
