@@ -21,7 +21,7 @@ class Event
 
     const MODE_INVITE = 0;
     const MODE_MOD_INVITE = 1;
-    const MODE_PRIVATE = 3;
+    const MODE_PRIVATE = 2;
 
     /**
      * @ORM\Id
