@@ -186,11 +186,11 @@ class EventController extends BaseApiController {
         }
 
         if ($event = $this->eventManager->createInvite($id, $data)) {
-            $event->setUrl(
-                $this->generateUrl('ravemap_invite_detail', [
-                    'id' => $event->getId()
-                ], UrlGeneratorInterface::ABSOLUTE_URL)
-            );
+            $url = $this->generateUrl('ravemap_invite_detail', [
+                'id' => $event->getId()
+            ], UrlGeneratorInterface::ABSOLUTE_URL);
+            $url = preg_replace('/http:\/\//', 'https://', $url);
+            $event->setUrl($url);
 
             return new Response($this->serializeToJson($event, ['invite_detail', 'invite_url', 'user_list', 'event_list']), 200, [
                 'content-type' => self::JSON_CONTENT_TYPE
