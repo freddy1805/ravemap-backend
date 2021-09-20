@@ -66,6 +66,34 @@ class InviteController extends BaseApiController {
     }
 
     /**
+     * @OA\Post(
+     *     operationId="accept",
+     *     summary="Accept invite with authenticated user",
+     *     tags={"Invite"},
+     *     @OA\Response(response="200", description="Returns json object with detailed invite data and success indicator"),
+     *     @OA\Response(response="401", description="Login faild. Invalid credentials")
+     * )
+     * @Route("/{id}/accept", name="accept_invite", methods={"POST"})
+     */
+    public function acceptAction(string $id): Response
+    {
+        /** @var Invite $invite */
+        if ($invite = $this->inviteManager->getById($id)) {
+            $invite->setToUser($this->getUser());
+            $invite->setStatus(Invite::STATUS_INVITE_ACCEPTED);
+
+            return new Response($this->serializeToJson([
+                'success' =>  $this->inviteManager->save($invite),
+                'invite' => $invite
+            ], ['invite_detail', 'event_list', 'user_list']), 200, [
+                'content-type' => self::JSON_CONTENT_TYPE,
+            ]);
+        }
+
+        throw  new NotFoundHttpException('Invite not found');
+    }
+
+    /**
      * @OA\Delete(
      *     operationId="delete",
      *     summary="Delete invite by id",
