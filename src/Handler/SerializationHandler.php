@@ -69,7 +69,7 @@ class SerializationHandler implements SubscribingHandlerInterface
         /** @var RouterInterface $urlGenerator */
         $urlGenerator = $this->container->get('router');
         $routeContext = $urlGenerator->getContext();
-        $urlPrefixPath = $routeContext->getScheme(). '://' . $routeContext->getHost();
+        $urlPrefixPath = 'https://' . $routeContext->getHost();
 
         return [
             'id' => $media->getId(),
