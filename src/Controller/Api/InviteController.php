@@ -56,7 +56,7 @@ class InviteController extends BaseApiController {
         /** @var Invite $invite */
         if ($invite = $this->inviteManager->getById($id)) {
             if ($invite->getToUser() === null) {
-                return new Response($this->serializeToJson($invite, ['invite_detail']), 200, [
+                return new Response($this->serializeToJson($invite, ['invite_detail', 'user_list', 'event_list']), 200, [
                     'content-type' => self::JSON_CONTENT_TYPE,
                 ]);
             }
