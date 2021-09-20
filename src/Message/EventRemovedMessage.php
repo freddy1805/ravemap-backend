@@ -6,16 +6,28 @@ use App\Entity\Event;
 
 class EventRemovedMessage {
 
+    /**
+     * @var string
+     */
     private string $eventId;
 
+    /**
+     * @var Event
+     */
     private Event $event;
+
+    /**
+     * @var string|null
+     */
+    private ?string $reason = null;
 
     /**
      * EventRemovedMessage constructor.
      * @param Event|null $event
      * @param string|null $eventId
+     * @param string|null $reason
      */
-    public function __construct(?Event $event = null, string $eventId = null)
+    public function __construct(?Event $event = null, string $eventId = null, string $reason = null)
     {
         if ($event) {
             $this->event = $event;
@@ -23,6 +35,10 @@ class EventRemovedMessage {
 
         if ($eventId) {
             $this->eventId = $eventId;
+        }
+
+        if ($reason) {
+            $this->reason = $reason;
         }
     }
 
@@ -40,5 +56,13 @@ class EventRemovedMessage {
     public function getEventId(): string
     {
         return $this->eventId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReason(): ?string
+    {
+        return $this->reason;
     }
 }

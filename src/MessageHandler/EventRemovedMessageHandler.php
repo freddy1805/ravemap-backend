@@ -8,6 +8,9 @@ use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 class EventRemovedMessageHandler implements MessageHandlerInterface
 {
+    const DEFAULT_REASON = 'Die Veranstaltung wurde leider abgesagt!';
+    const CUSTOM_REASON = 'Die Veranstaltung wurde leider wegen %s abgesagt!';
+
     /**
      * @var FCMClient
      */
@@ -28,10 +31,15 @@ class EventRemovedMessageHandler implements MessageHandlerInterface
     public function __invoke(EventRemovedMessage $eventRemovedMessage)
     {
         $event = $eventRemovedMessage->getEvent();
+        $message = self::DEFAULT_REASON;
+
+        if ($reason = $eventRemovedMessage->getReason()) {
+            $message = sprintf(self::CUSTOM_REASON, $reason);
+        }
 
         $notification = $this->FCMClient->createTopicNotification(
             $event->getName(),
-            'Die Veranstaltung wurde abgesagt!',
+            $message,
             'event-' . $eventRemovedMessage->getEventId(),
         );
 

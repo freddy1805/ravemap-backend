@@ -206,13 +206,23 @@ class EventController extends BaseApiController {
      *     operationId="removeEvent",
      *     summary="Remove an event",
      *     tags={"Event"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *              title="RemoveEventObject",
+     *              type="object",
+     *              @OA\Property(property="reason", type="string", example="Schlechtes Wetter", nullable=true),
+     *         )
+     *     ),
      *     @OA\Response(response="201", description="Returns the removal status"),
      *     @OA\Response(response="401", description="Login faild. Invalid credentials")
      * )
      * @Route("/{id}", name="remove", methods={"DELETE"})
      */
-    public function removeEventAction(string $id): Response
+    public function removeEventAction(string $id, Request $request): Response
     {
+        $data = json_decode($request->getContent(), true);
+
         /** @var Event $event */
         $event = $this->eventManager->getById($id);
 
@@ -225,7 +235,7 @@ class EventController extends BaseApiController {
         }
 
         return new Response($this->serializeToJson([
-            'success' => $this->eventManager->remove($event),
+            'success' => $this->eventManager->removeWithReason($event, $data['reason'] ?? null),
         ], ['remove_event']), 200, [
             'content-type' => self::JSON_CONTENT_TYPE,
         ]);

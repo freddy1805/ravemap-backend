@@ -227,6 +227,34 @@ class EventManager extends BaseManager {
 
     /**
      * @param Event $event
+     * @param string|null $reason
+     * @return bool
+     */
+    public function removeWithReason(Event $event, string $reason = null): bool
+    {
+        $eventId = $event->getId();
+
+        try {
+            foreach ($event->getInvites() as $invite) {
+                $this->entityManager->remove($invite);
+            }
+
+            foreach ($event->getPosts() as $post) {
+                $this->entityManager->remove($post);
+            }
+
+            $this->entityManager->remove($event);
+            $this->entityManager->flush();
+
+            $this->messageBus->dispatch(new EventRemovedMessage($event, $eventId, $reason));
+            return true;
+        } catch (\Exception $exception) {
+            return false;
+        }
+    }
+
+    /**
+     * @param Event $event
      * @return Event
      */
     public function updateLocation(Event &$event): Event
