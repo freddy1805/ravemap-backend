@@ -115,6 +115,8 @@ class User extends BaseUser
      * @Serializer\Groups({
      *     "user_detail"
      * })
+     * @Serializer\Accessor(getter="getFriendList")
+     * @Serializer\MaxDepth(depth=1)
      */
     protected $friends;
 
@@ -255,6 +257,19 @@ class User extends BaseUser
     }
 
     /**
+     * @return array
+     */
+    public function getFriendList(): array
+    {
+        $result = [];
+        foreach ($this->friends as $friend) {
+            $result[] = $friend->toArray();
+        }
+
+        return $result;
+    }
+
+    /**
      * @param UserInterface $user
      * @return User
      */
@@ -308,6 +323,18 @@ class User extends BaseUser
         $this->friendsWithMe->removeElement($user);
 
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'username' => $this->username,
+            'image' => $this->image
+        ];
     }
 
     /**
