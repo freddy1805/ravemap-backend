@@ -37,3 +37,13 @@
     </div>
 </div>
 {% endblock %}
+
+{% block javscripts %}
+<script type="text/javascript">
+    $(document).ready(function () {
+        if( /Android|webOS|iPhone|iPad|iPod|Opera Mini/i.test(navigator.userAgent) ) {
+            window.location.href = 'ravemap://invite/{{ invite.id }}';
+        }
+    });
+</script>
+{% endblock %}
