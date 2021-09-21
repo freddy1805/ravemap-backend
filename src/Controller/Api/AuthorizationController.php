@@ -41,7 +41,7 @@ class AuthorizationController extends BaseApiController
     public function __construct(
         ContainerInterface $container,
         UserManager $userManager,
-        MessageBusInterface $messageBus,
+        MessageBusInterface $messageBus
     ) {
         parent::__construct($container);
         $this->userManager = $userManager;
