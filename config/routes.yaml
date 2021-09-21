@@ -4,6 +4,7 @@ fos_user_login:
 fos_user_change_pw:
   resource: "@FOSUserBundle/Resources/config/routing/change_password.xml"
 fos_user_register:
+  prefix: /register
   resource: "@FOSUserBundle/Resources/config/routing/registration.xml"
 #########################################
 #### API DOCUMENTATION ##################
