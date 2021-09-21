@@ -5,7 +5,7 @@ namespace App\MessageHandler;
 use App\Entity\User;
 use App\Message\UserRegisteredMessage;
 use App\Service\Entity\UserManager;
-use FOS\UserBundle\Mailer\MailerInterface;
+use FOS\UserBundle\Mailer\TwigSwiftMailer;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 /**
@@ -21,16 +21,16 @@ class UserRegisteredMessageHandler implements MessageHandlerInterface
     private UserManager $userManager;
 
     /**
-     * @var MailerInterface
+     * @var TwigSwiftMailer
      */
-    private MailerInterface $mailer;
+    private TwigSwiftMailer $mailer;
 
     /**
      * UserRegisteredMessageHandler constructor.
      * @param UserManager $userManager
-     * @param MailerInterface $mailer
+     * @param TwigSwiftMailer $mailer
      */
-    public function __construct(UserManager $userManager, MailerInterface $mailer)
+    public function __construct(UserManager $userManager, TwigSwiftMailer $mailer)
     {
         $this->userManager = $userManager;
         $this->mailer = $mailer;
