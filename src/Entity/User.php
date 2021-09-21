@@ -112,11 +112,6 @@ class User extends BaseUser
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="friend_user_id", referencedColumnName="id")}
      *      )
-     * @Serializer\Groups({
-     *     "user_detail"
-     * })
-     * @Serializer\Accessor(getter="getFriendList")
-     * @Serializer\MaxDepth(depth=1)
      */
     protected $friends;
 
