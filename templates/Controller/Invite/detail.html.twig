@@ -34,7 +34,7 @@
             <a href="{{ path('ravemap_invite_deny', {'id': invite.id}) }}" class="btn btn-outline-dark text-danger">{{ 'invite.choices.no'|trans({}, 'invites') }}</a>
             <a href="{{ path('ravemap_invite_maybe', {'id': invite.id}) }}" class="btn btn-outline-dark text-warning">{{ 'invite.choices.maybe'|trans({}, 'invites') }}</a>
         </div>
-        <a href="ravemap://invite/{{ invite.id }}" id="inapp-btn" class="btn btn-outline-secondary d-none">In rav3map öffnen</a>
+        <a href="ravemap://invite/{{ invite.id }}" id="inapp-btn" class="btn btn-outline-secondary d-none mt-2 w-100">In rav3map öffnen</a>
     </div>
 </div>
 {% endblock %}
