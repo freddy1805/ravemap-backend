@@ -106,7 +106,7 @@ class UserController extends BaseApiController
     }
 
     /**
-     * @OA\Post(
+     * @OA\Patch(
      *     operationId="updateMe",
      *     summary="Update user data",
      *     tags={"User"},
@@ -122,7 +122,7 @@ class UserController extends BaseApiController
      *     @OA\Response(response="200", description="Returns the updated user"),
      *     @OA\Response(response="401", description="Login faild. Invalid credentials")
      * )
-     * @Route("/me/update", name="update_me", methods={"POST"})
+     * @Route("/update", name="update_me", methods={"PATCH"})
      */
     public function updateMeAction(Request $request): Response
     {
@@ -136,7 +136,7 @@ class UserController extends BaseApiController
     }
 
     /**
-     * @OA\Post(
+     * @OA\Patch(
      *     operationId="updateImage",
      *     summary="Update user image",
      *     tags={"User"},
@@ -151,7 +151,7 @@ class UserController extends BaseApiController
      *     @OA\Response(response="200", description="Returns the updated user"),
      *     @OA\Response(response="401", description="Login faild. Invalid credentials")
      * )
-     * @Route("/me/image", name="update_image", methods={"POST"})
+     * @Route("/image", name="update_image", methods={"PATCH"})
      */
     public function updateImageAction(Request $request): Response
     {
