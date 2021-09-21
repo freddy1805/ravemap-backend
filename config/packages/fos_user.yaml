@@ -3,5 +3,5 @@ fos_user:
   firewall_name: main
   user_class: App\Entity\User
   from_email:
-    address: "info@ravemap.tk"
-    sender_name: "rav3map - rave easily"
+    address: 'info@ravemap.tk'
+    sender_name: 'rav3map - rave easily'
