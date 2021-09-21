@@ -199,7 +199,7 @@ class UserController extends BaseApiController
         $user = $this->getUser();
         $friends = $user->getFriends();
 
-        return new Response($this->serializeToJson($friends, ['user_list']), 200, [
+        return new Response($this->serializeToJson($friends, ['user_list', 'user_image']), 200, [
             'content-type' => self::JSON_CONTENT_TYPE,
         ]);
     }
