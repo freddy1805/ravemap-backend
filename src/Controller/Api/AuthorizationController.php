@@ -12,7 +12,7 @@ use OpenApi\Annotations as OA;
 /**
  * Class AuthorizationController
  * @package App\Controller\Api
- * @Route(name="ravemap_api_auth")
+ * @Route(name="ravemap_api_auth_")
  */
 class AuthorizationController extends BaseApiController
 {
