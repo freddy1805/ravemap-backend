@@ -116,7 +116,7 @@ class UserController extends BaseApiController
      *     @OA\Response(response="200", description="Returns the updated user"),
      *     @OA\Response(response="401", description="Login faild. Invalid credentials")
      * )
-     * @Route("/me", name="update_me", methods={"PATCH"})
+     * @Route("/me", name="update", methods={"PATCH"})
      */
     public function updateMeAction(Request $request): Response
     {

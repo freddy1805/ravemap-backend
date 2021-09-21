@@ -73,7 +73,7 @@ class InviteController extends BaseApiController {
      *     @OA\Response(response="200", description="Returns json object with detailed invite data and success indicator"),
      *     @OA\Response(response="401", description="Login faild. Invalid credentials")
      * )
-     * @Route("/{id}/accept", name="accept_invite", methods={"POST"})
+     * @Route("/{id}/accept", name="accept", methods={"POST"})
      */
     public function acceptAction(string $id): Response
     {
