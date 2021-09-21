@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Exception\ValidationException;
 use App\Message\UserRegisteredMessage;
 use App\Service\Entity\UserManager;
+use FOS\UserBundle\Util\TokenGenerator;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,7 +41,7 @@ class AuthorizationController extends BaseApiController
     public function __construct(
         ContainerInterface $container,
         UserManager $userManager,
-        MessageBusInterface $messageBus
+        MessageBusInterface $messageBus,
     ) {
         parent::__construct($container);
         $this->userManager = $userManager;
@@ -128,6 +129,8 @@ class AuthorizationController extends BaseApiController
 
             /** @var User $user */
             $user = $this->userManager->create($data, true);
+
+
 
             $this->messageBus->dispatch(new UserRegisteredMessage($user));
 

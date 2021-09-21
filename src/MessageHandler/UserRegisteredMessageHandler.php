@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Message\UserRegisteredMessage;
 use App\Service\Entity\UserManager;
 use FOS\UserBundle\Mailer\TwigSwiftMailer;
+use FOS\UserBundle\Util\TokenGenerator;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 /**
@@ -21,6 +22,11 @@ class UserRegisteredMessageHandler implements MessageHandlerInterface
     private UserManager $userManager;
 
     /**
+     * @var TokenGenerator
+     */
+    private TokenGenerator $tokenGenerator;
+
+    /**
      * @var TwigSwiftMailer
      */
     private TwigSwiftMailer $mailer;
@@ -28,11 +34,16 @@ class UserRegisteredMessageHandler implements MessageHandlerInterface
     /**
      * UserRegisteredMessageHandler constructor.
      * @param UserManager $userManager
+     * @param TokenGenerator $tokenGenerator
      * @param TwigSwiftMailer $mailer
      */
-    public function __construct(UserManager $userManager, TwigSwiftMailer $mailer)
-    {
+    public function __construct(
+        UserManager $userManager,
+        TokenGenerator $tokenGenerator,
+        TwigSwiftMailer $mailer
+    ) {
         $this->userManager = $userManager;
+        $this->tokenGenerator = $tokenGenerator;
         $this->mailer = $mailer;
     }
 
@@ -43,6 +54,11 @@ class UserRegisteredMessageHandler implements MessageHandlerInterface
     {
         /** @var User $user */
         $user = $userRegisteredMessage->getUser();
+
+        $user->setEnabled(false);
+        if (null === $user->getConfirmationToken()) {
+            $user->setConfirmationToken($this->tokenGenerator->generateToken());
+        }
 
         $this->mailer->sendConfirmationEmailMessage($user);
     }
