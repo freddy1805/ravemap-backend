@@ -49,7 +49,6 @@ class AuthorizationController extends BaseApiController
     }
 
     /**
-     * @Route("/login_check", name="login", methods={"POST"})
      * @OA\Post(
      *     operationId="login",
      *     security={},
@@ -68,6 +67,7 @@ class AuthorizationController extends BaseApiController
      *     @OA\Response(response="200", description="Returns json object with token and a refreshToken, which can be used in authorization-header"),
      *     @OA\Response(response="401", description="Login faild. Invalid credentials")
      * )
+     * @Route("/login_check", name="login", methods={"POST"})
      */
     public function loginAction(): Response
     {
@@ -76,7 +76,6 @@ class AuthorizationController extends BaseApiController
 
 
     /**
-     * @Route("/token/refresh", name="token_refresh", methods={"POST"})
      * @OA\Post(
      *     operationId="refreshToken",
      *     security={},
@@ -94,6 +93,7 @@ class AuthorizationController extends BaseApiController
      *     @OA\Response(response="200", description="Returns json object with token and a refreshToken, which can be used in authorization-header"),
      *     @OA\Response(response="401", description="Renew failed. Check refresh_token")
      * )
+     * @Route("/token/refresh", name="token_refresh", methods={"POST"})
      * @return Response
      */
     public function refreshAction(): Response
@@ -102,7 +102,6 @@ class AuthorizationController extends BaseApiController
     }
 
     /**
-     * @Route("/register", name="register", methods={"POST"})
      * @OA\Post(
      *     operationId="register",
      *     security={},
@@ -121,6 +120,7 @@ class AuthorizationController extends BaseApiController
      *     @OA\Response(response="201", description="Returns json object with new user"),
      *     @OA\Response(response="400", description="Bad request! Check payload")
      * )
+     * @Route("/register", name="register", methods={"POST"})
      */
     public function registerAction(Request $request)
     {
@@ -129,8 +129,6 @@ class AuthorizationController extends BaseApiController
 
             /** @var User $user */
             $user = $this->userManager->create($data, true);
-
-
 
             $this->messageBus->dispatch(new UserRegisteredMessage($user));
 
@@ -142,5 +140,47 @@ class AuthorizationController extends BaseApiController
                 'error' => 'data.not_valid',
             ], 400);
         }
+    }
+
+    /**
+     * @OA\Post(
+     *     operationId="confirmAccount",
+     *     security={},
+     *     summary="Confirm user account with token",
+     *     tags={"Authorization"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *              title="ConfirmObject",
+     *              type="object",
+     *              @OA\Property(property="token", type="string", example="3u3ehukdnw3qscaD§Cw")
+     *         )
+     *     ),
+     *     @OA\Response(response="200", description="Returns success indecator"),
+     *     @OA\Response(response="400", description="Bad request! Check payload")
+     * )
+     * @Route("/confirm", name="confirm_account", methods={"POST"})
+     */
+    public function confirmAction(Request $request): Response
+    {
+        $data = json_decode($request->getContent(), true);
+
+        if (isset($data['token'])) {
+            if ($user = $this->userManager->getByConfirmationToken($data['token'])) {
+                $user->setEnabled(true);
+                $user->setConfirmationToken(null);
+                return new JsonResponse([
+                    'success' => $this->userManager->save($user)
+                ]);
+            }
+
+            return new JsonResponse([
+                'error' => 'result.not_found'
+            ], 404);
+        }
+
+        return new JsonResponse([
+            'error' => 'data.not_valid'
+        ], 400);
     }
 }

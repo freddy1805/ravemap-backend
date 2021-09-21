@@ -11,6 +11,6 @@ framework:
 
         routing:
             # Route your messages to the transports
-            #'App\Message\UserRegisteredMessage': async
+            'App\Message\UserRegisteredMessage': async
             'App\Message\EventMessage': async
             'App\Message\EventRemovedMessage': async

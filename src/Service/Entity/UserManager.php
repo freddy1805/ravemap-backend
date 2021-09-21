@@ -25,4 +25,13 @@ class UserManager extends BaseManager {
     {
         return User::class;
     }
+
+    /**
+     * @param string $token
+     * @return User|null
+     */
+    public function getByConfirmationToken(string $token): ?User
+    {
+        return $this->repository->findOneBy(['confirmationToken' => $token]);
+    }
 }
