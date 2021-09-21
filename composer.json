@@ -1,8 +1,15 @@
 {
+    "name": "freddy1805/ravemap-backend",
+    "authors": [{
+        "name": "Frederik Roettgerkamp",
+        "email": "frederik@roettgerkamp.com",
+        "role": "Developer/Maintainer"
+    }],
     "type": "project",
     "license": "proprietary",
     "require": {
         "php": ">=7.4",
+        "ext-json": "*",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "ext-gd": "*",

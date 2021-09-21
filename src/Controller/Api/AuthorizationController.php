@@ -2,10 +2,15 @@
 
 namespace App\Controller\Api;
 
+use App\Entity\User;
+use App\Exception\ValidationException;
+use App\Message\UserRegisteredMessage;
 use App\Service\Entity\UserManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use OpenApi\Annotations as OA;
 
@@ -16,16 +21,30 @@ use OpenApi\Annotations as OA;
  */
 class AuthorizationController extends BaseApiController
 {
-
+    /**
+     * @var UserManager
+     */
     private UserManager $userManager;
 
     /**
-     * AuthorizationController constructor.
+     * @var MessageBusInterface
      */
-    public function __construct(ContainerInterface $container, UserManager $userManager)
-    {
+    private MessageBusInterface $messageBus;
+
+    /**
+     * AuthorizationController constructor.
+     * @param ContainerInterface $container
+     * @param UserManager $userManager
+     * @param MessageBusInterface $messageBus
+     */
+    public function __construct(
+        ContainerInterface $container,
+        UserManager $userManager,
+        MessageBusInterface $messageBus
+    ) {
         parent::__construct($container);
         $this->userManager = $userManager;
+        $this->messageBus = $messageBus;
     }
 
     /**
@@ -49,7 +68,7 @@ class AuthorizationController extends BaseApiController
      *     @OA\Response(response="401", description="Login faild. Invalid credentials")
      * )
      */
-    public function loginAction()
+    public function loginAction(): Response
     {
         return $this->redirectToRoute('api_login_check');
     }
@@ -74,10 +93,9 @@ class AuthorizationController extends BaseApiController
      *     @OA\Response(response="200", description="Returns json object with token and a refreshToken, which can be used in authorization-header"),
      *     @OA\Response(response="401", description="Renew failed. Check refresh_token")
      * )
-     * @param Request $request
      * @return Response
      */
-    public function refreshAction(Request $request)
+    public function refreshAction(): Response
     {
         return $this->forward('gesdinet.jwtrefreshtoken::refresh');
     }
@@ -105,12 +123,21 @@ class AuthorizationController extends BaseApiController
      */
     public function registerAction(Request $request)
     {
-        $data = json_decode($request->getContent(), true);
+        try {
+            $data = json_decode($request->getContent(), true);
 
-        $user = $this->userManager->create($data, true);
+            /** @var User $user */
+            $user = $this->userManager->create($data, true);
 
-        return new Response($this->serializeToJson($user, ['user_detail']), 201, [
-            'content-type' => self::JSON_CONTENT_TYPE
-        ]);
+            $this->messageBus->dispatch(new UserRegisteredMessage($user));
+
+            return new Response($this->serializeToJson($user, ['user_detail']), 201, [
+                'content-type' => self::JSON_CONTENT_TYPE
+            ]);
+        } catch (ValidationException $validationException) {
+            return new JsonResponse([
+                'error' => 'data.not_valid',
+            ], 400);
+        }
     }
 }
