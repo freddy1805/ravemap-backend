@@ -35,8 +35,8 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-    FOS\UserBundle\Mailer\Mailer:
-        alias: fos_user.mailer.default
+    FOS\UserBundle\Mailer\TwigSwiftMailer:
+        alias: fos_user.mailer.twig_swift
 
     Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler:
         arguments:

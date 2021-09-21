@@ -5,7 +5,7 @@ namespace App\MessageHandler;
 use App\Entity\User;
 use App\Message\UserRegisteredMessage;
 use App\Service\Entity\UserManager;
-use FOS\UserBundle\Mailer\Mailer;
+use FOS\UserBundle\Mailer\TwigSwiftMailer;
 use FOS\UserBundle\Util\TokenGeneratorInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
@@ -27,20 +27,20 @@ class UserRegisteredMessageHandler implements MessageHandlerInterface
     private TokenGeneratorInterface $tokenGenerator;
 
     /**
-     * @var Mailer
+     * @var TwigSwiftMailer
      */
-    private Mailer $mailer;
+    private TwigSwiftMailer $mailer;
 
     /**
      * UserRegisteredMessageHandler constructor.
      * @param UserManager $userManager
      * @param TokenGeneratorInterface $tokenGenerator
-     * @param Mailer $mailer
+     * @param TwigSwiftMailer $mailer
      */
     public function __construct(
         UserManager $userManager,
         TokenGeneratorInterface $tokenGenerator,
-        Mailer $mailer
+        TwigSwiftMailer $mailer
     ) {
         $this->userManager = $userManager;
         $this->tokenGenerator = $tokenGenerator;
