@@ -121,6 +121,12 @@ class User extends BaseUser
     protected $friends;
 
     /**
+     * @var Collection
+     * @ORM\OneToMany(targetEntity="App\Entity\Device", mappedBy="user")
+     */
+    protected $devices;
+
+    /**
      * User constructor.
      */
     public function __construct()
@@ -133,6 +139,7 @@ class User extends BaseUser
 
         $this->friendsWithMe = new ArrayCollection();
         $this->friends = new ArrayCollection();
+        $this->devices = new ArrayCollection();
     }
 
     public function getId(): ?string

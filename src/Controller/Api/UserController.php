@@ -4,6 +4,8 @@ namespace App\Controller\Api;
 
 use App\Entity\Media;
 use App\Entity\User;
+use App\Exception\ValidationException;
+use App\Service\Entity\DeviceManager;
 use App\Service\Entity\EventManager;
 use App\Service\Entity\UserManager;
 use Sonata\MediaBundle\Entity\MediaManager;
@@ -39,7 +41,9 @@ class UserController extends BaseApiController
 
     private EventManager $eventManager;
 
-    private $mediaManager;
+    private DeviceManager $deviceManager;
+
+    private MediaManagerInterface $mediaManager;
 
     private FormFactoryInterface $formFactory;
 
@@ -52,13 +56,16 @@ class UserController extends BaseApiController
      * @param ContainerInterface $container
      * @param UserManager $userManager
      * @param EventManager $eventManager
+     * @param DeviceManager $deviceManager
      * @param FormFactoryInterface $factory
      * @param Pool $mediaPool
+     * @param ParameterBagInterface $parameterBag
      */
     public function __construct(
         ContainerInterface $container,
         UserManager $userManager,
         EventManager $eventManager,
+        DeviceManager $deviceManager,
         FormFactoryInterface $factory,
         Pool $mediaPool,
         ParameterBagInterface $parameterBag
@@ -67,6 +74,7 @@ class UserController extends BaseApiController
         parent::__construct($container);
         $this->userManager = $userManager;
         $this->eventManager = $eventManager;
+        $this->deviceManager = $deviceManager;
         $this->formFactory = $factory;
         $this->mediaManager = $container->get('sonata.media.manager.media');
         $this->mediaPool = $mediaPool;
@@ -168,7 +176,7 @@ class UserController extends BaseApiController
             return new Response($this->serializeToJson($user, ['user_detail']), 200, [
                 'content-type' => self::JSON_CONTENT_TYPE
             ]);
-        } catch (\RuntimeException | NotFoundHttpException | \InvalidArgumentException $ex) {
+        } catch (\Exception $ex ) {
             return new Response($this->serializeToJson(['error' => 'Coud not upload image'], ['upload_error']), 400, [
                 'content-type' => self::JSON_CONTENT_TYPE
             ]);
@@ -230,7 +238,47 @@ class UserController extends BaseApiController
     }
 
     /**
-     * @param UploadedFile $file
+     * @OA\Post(
+     *     operationId="registerDevice",
+     *     summary="Register new device to authenticated user",
+     *     tags={"User"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *              title="RegisterDeviceObject",
+     *              type="object",
+     *              @OA\Property(property="deviceId", type="string", example="124324-4523423-34234123", nullable=false),
+     *              @OA\Property(property="name", type="string", example="iPhone von Frederik", nullable=false),
+     *              @OA\Property(property="os", type="string", example="iOS", nullable=true),
+     *              @OA\Property(property="appVersion", type="string", example="1.0.2", nullable=true),
+     *              @OA\Property(property="firebaseToken", type="string", example="Ada34§4d2dD_sfQ3dAcscsegr", nullable=false),
+     *         )
+     *     ),
+     *     @OA\Response(response="200", description="Returns the registered device"),
+     *     @OA\Response(response="401", description="Login faild. Invalid credentials")
+     * )
+     * @Route("/devices", name="devices_register", methods={"POST"})
+     */
+    public function registerDeviceAction(Request $request)
+    {
+        try {
+            $data = json_decode($request->getContent(), true);
+            $data['user'] = $this->getUser();
+
+            if ($device = $this->deviceManager->create($data, true)) {
+                return new Response($this->serializeToJson($device, ['user_device', 'user_list']), 200, [
+                    'content-type' => self::JSON_CONTENT_TYPE,
+                ]);
+            }
+        } catch (ValidationException $validationException) {
+            return new JsonResponse([
+                'error' => 'data.not_valid',
+            ], 400);
+        }
+    }
+
+    /**
+     * @param File $file
      * @param UserInterface $user
      * @return Media
      */
@@ -252,7 +300,8 @@ class UserController extends BaseApiController
 
     /**
      * @param string $base64
-     * @return UploadedFile|null
+     * @return File|null
+     * @throws \Exception
      */
     protected function base64ToJpeg(string $base64): ?File
     {

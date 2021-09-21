@@ -2,22 +2,20 @@
 
 namespace App\Exception;
 
-use App\Entity\Event;
-
 class ValidationException extends \Exception {
 
     protected $message  = 'Validation failed';
 
-    private ?object $object;
+    private array $result = [];
 
-    public function __construct(?object $object = null)
+    public function __construct(array $result)
     {
-        $this->object = $object;
+        $this->result = $result;
         parent::__construct($this->message, $this->code, $this->getPrevious());
     }
 
-    public function getObject(): ?object
+    public function getResult(): ?array
     {
-        return $this->object;
+        return $this->result;
     }
 }

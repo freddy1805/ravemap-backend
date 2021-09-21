@@ -38,9 +38,6 @@ class BaseManager implements ManagerInterface {
      */
     public function create(array $data, bool $andFlush = false): object
     {
-        if (!$this->validateData($data)) {
-            throw new ValidationException();
-        }
         $object = $this->mapArrayToEntity($data);
 
         if ($andFlush) {
@@ -113,32 +110,32 @@ class BaseManager implements ManagerInterface {
      */
     public function mapArrayToEntity(array $data): object
     {
-        $className = $this->getEntityClass();
+        $validationResult = $this->validateData($data);
 
-        $object = new $className();
-
-        if (!$this->validateData($data)) {
-            throw new ValidationException($object);
+        if (!empty($validationResult)) {
+            throw new ValidationException($validationResult);
         }
+
+        $className = $this->getEntityClass();
 
         return EntityMapper::arrayToEntity($className, $data);
     }
 
     /**
      * @param array $data
-     * @return bool
+     * @return array
      */
-    protected function validateData(array $data): bool
+    protected function validateData(array $data): array
     {
-        $valid = true;
+        $errors = [];
 
         foreach ($this->validation as $validationKey) {
             if (!isset($data[$validationKey])) {
-                $valid = false;
+                $errors[$validationKey] = 'not defined';
             }
         }
 
-        return $valid;
+        return $errors;
     }
 
     public function getEntityClass(): string
