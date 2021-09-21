@@ -45,6 +45,10 @@ services:
         #calls:
         #    - [createTable]
 
+    App\EventListener\ExceptionListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception }
+
     gos_web_socket.authentication.provider.custom.default:
         class: App\Websocket\Provider\AuthProvider
 

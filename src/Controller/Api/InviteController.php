@@ -34,8 +34,11 @@ class InviteController extends BaseApiController {
      * @param EventManager $eventManager
      * @param InviteManager $inviteManager
      */
-    public function __construct(ContainerInterface $container, EventManager $eventManager, InviteManager $inviteManager)
-    {
+    public function __construct(
+        ContainerInterface $container,
+        EventManager $eventManager,
+        InviteManager $inviteManager
+    ) {
         parent::__construct($container);
         $this->eventManager = $eventManager;
         $this->inviteManager = $inviteManager;
