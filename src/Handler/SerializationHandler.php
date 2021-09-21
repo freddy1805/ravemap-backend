@@ -3,8 +3,6 @@
 namespace App\Handler;
 
 use App\Entity\Media;
-use App\Entity\SonataMediaMedia;
-use App\Entity\User;
 use JMS\Serializer\Context;
 use JMS\Serializer\GraphNavigator;
 use JMS\Serializer\Handler\SubscribingHandlerInterface;

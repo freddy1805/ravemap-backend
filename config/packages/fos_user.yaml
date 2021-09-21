@@ -6,7 +6,7 @@ fos_user:
     mailer: fos_user.mailer.twig_swift
   from_email:
     address: 'info@ravemap.tk'
-    sender_name: 'rav3map - rave easily'
+    sender_name: 'RAV3MAP'
   registration:
     confirmation:
       enabled: true
