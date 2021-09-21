@@ -8,11 +8,7 @@ use App\Exception\ValidationException;
 use App\Service\Entity\DeviceManager;
 use App\Service\Entity\EventManager;
 use App\Service\Entity\UserManager;
-use Sonata\MediaBundle\Entity\MediaManager;
-use Sonata\MediaBundle\Form\Type\ApiMediaType;
-use Sonata\MediaBundle\Model\MediaInterface;
 use Sonata\MediaBundle\Model\MediaManagerInterface;
-use Sonata\MediaBundle\Provider\MediaProviderInterface;
 use Sonata\MediaBundle\Provider\Pool;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -23,20 +19,18 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use OpenApi\Annotations as OA;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Validator\Constraints\Json;
+
 
 /**
  * Class UserController
  * @package App\Controller\Api
- * @Route("/user", name="reavemap_api_user_")
+ * @Route("/user", name="ravemap_api_user_")
  */
 class UserController extends BaseApiController
 {
-
     private UserManager $userManager;
 
     private EventManager $eventManager;
