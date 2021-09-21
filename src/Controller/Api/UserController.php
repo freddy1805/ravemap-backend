@@ -122,7 +122,7 @@ class UserController extends BaseApiController
      *     @OA\Response(response="200", description="Returns the updated user"),
      *     @OA\Response(response="401", description="Login faild. Invalid credentials")
      * )
-     * @Route("/update", name="update_me", methods={"PATCH"})
+     * @Route("/me", name="update_me", methods={"PATCH"})
      */
     public function updateMeAction(Request $request): Response
     {
@@ -199,7 +199,7 @@ class UserController extends BaseApiController
      *     @OA\Response(response="200", description="Returns the updated user"),
      *     @OA\Response(response="401", description="Login faild. Invalid credentials")
      * )
-     * @Route("/friend/add", name="add_friend", methods={"POST"})
+     * @Route("/friends", name="add_friend", methods={"POST"})
      */
     public function addFriendAction(Request $request): Response
     {
