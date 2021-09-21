@@ -40,6 +40,7 @@ class Invite
      *     "invite_list",
      *     "invite_detail"
      * })
+     * @Serializer\Accessor(getter="getInvitedFrom")
      */
     protected $fromUser;
 
@@ -49,6 +50,7 @@ class Invite
      * @Serializer\Groups({
      *     "invite_detail"
      * })
+     * @Serializer\Accessor(getter="getInvitedTo")
      */
     protected $toUser;
 
@@ -241,6 +243,28 @@ class Invite
         $this->url = $url;
 
         return $this;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getInvitedFrom(): ?array
+    {
+        if (!$this->fromUser) {
+            return null;
+        }
+        return $this->fromUser->toArray();
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getInvitedTo(): ?array
+    {
+        if (!$this->toUser) {
+            return null;
+        }
+        return $this->toUser->toArray();
     }
 
     /**

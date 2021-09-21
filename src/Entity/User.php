@@ -338,6 +338,7 @@ class User extends BaseUser
         return [
             'id' => $this->id,
             'username' => $this->username,
+            'raver_score' => $this->raverScore,
             'image' => $this->image
         ];
     }
