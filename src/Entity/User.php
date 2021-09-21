@@ -88,6 +88,7 @@ class User extends BaseUser
      * @Serializer\Groups({
      *     "user_detail"
      * })
+     * @Serializer\MaxDepth(depth=1)
      */
     protected $invites;
 
