@@ -173,7 +173,7 @@ class EventController extends BaseApiController {
      *     @OA\Response(response="201", description="Returns the new created invite"),
      *     @OA\Response(response="401", description="Login faild. Invalid credentials")
      * )
-     * @Route("/{id}/invite", name="create_invite", methods={"POST"})
+     * @Route("/{id}/invites", name="create_invite", methods={"POST"})
      */
     public function createInviteAction(string $id, Request $request): Response
     {

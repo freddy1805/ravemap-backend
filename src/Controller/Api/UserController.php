@@ -184,6 +184,27 @@ class UserController extends BaseApiController
     }
 
     /**
+     * @OA\Get(
+     *     operationId="getFriends",
+     *     summary="Get friend list of authenticated user",
+     *     tags={"User"},
+     *     @OA\Response(response="200", description="Returns the user friends list"),
+     *     @OA\Response(response="401", description="Login faild. Invalid credentials")
+     * )
+     * @Route("/friends", name="friends", methods={"GET"})
+     */
+    public function friendListAction(): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $friends = $user->getFriends();
+
+        return new Response($this->serializeToJson($friends, ['user_list']), 200, [
+            'content-type' => self::JSON_CONTENT_TYPE,
+        ]);
+    }
+
+    /**
      * @OA\Post(
      *     operationId="addFriend",
      *     summary="Add friend to own user",
