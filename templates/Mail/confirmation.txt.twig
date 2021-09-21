@@ -1,14 +1,14 @@
-{% block subject %}rav3map: Konto aktivieren{% endblock %}
+{% block subject %}Bestätige dein RAV3MAP Konto{% endblock %}
 
 {% block body_text %}
 {% autoescape false %}
-Hallo {{ user.username }} !
+Hallo {{ user.username }}!
 
 Besuchen Sie bitte folgende Seite, um Ihr Benutzerkonto zu bestätigen:
 {{ confirmationUrl }}
 
 Mit besten Grüßen
-das rav3map Team
+das RAV3MAP Team
 {% endautoescape %}
 {% endblock %}
 
