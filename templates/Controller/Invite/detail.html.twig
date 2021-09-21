@@ -34,6 +34,7 @@
             <a href="{{ path('ravemap_invite_deny', {'id': invite.id}) }}" class="btn btn-outline-dark text-danger">{{ 'invite.choices.no'|trans({}, 'invites') }}</a>
             <a href="{{ path('ravemap_invite_maybe', {'id': invite.id}) }}" class="btn btn-outline-dark text-warning">{{ 'invite.choices.maybe'|trans({}, 'invites') }}</a>
         </div>
+        <a href="ravemap://invite/{{ invite.id }}" id="inapp-btn" class="bt btn-outline-secondary d-none">In rav3map öffnen</a>
     </div>
 </div>
 {% endblock %}
@@ -42,7 +43,7 @@
 <script type="text/javascript">
     $(document).ready(function () {
         if( /Android|webOS|iPhone|iPad|iPod|Opera Mini/i.test(navigator.userAgent) ) {
-            window.location.href = 'ravemap://invite/{{ invite.id }}';
+            $('#inapp-btn').removeClass('d-none');
         }
     });
 </script>
