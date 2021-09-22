@@ -116,11 +116,10 @@ class AuthorizationController extends BaseApiController
      *              type="object",
      *              @OA\Property(property="username", type="string", example="max_mustermann")
      *         )
-     *
      *     ),
      *     @OA\Response(response="200", description="Returns json object with available indecator"),
      * )
-     * @Route("/username", name="check_username", methods={"POST"})
+     * @Route("/check", name="check_username", methods={"POST"})
      */
     public function checkUsernameAction(Request $request): Response
     {
