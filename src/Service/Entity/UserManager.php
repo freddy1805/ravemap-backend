@@ -39,38 +39,25 @@ class UserManager extends BaseManager {
      * @param $username
      * @return mixed
      */
-    public function generateUniqueUsername($username){
-        $userNamesList = array();
-        $firstChar = str_split($username, 1)[0];
-        $firstTwoChar = str_split($username, 2)[0];
-
+    public function generateUniqueUsername($username)
+    {
         $numSufix = explode('-', date('Y-m-d-H'));
 
-        array_push($userNamesList,
+        $userNamesList = [
             $username,
-            $firstChar.$username,
-            $firstTwoChar.$username,
             $username.$numSufix[0],
             $username.$numSufix[1],
             $username.$numSufix[2],
             $username.$numSufix[3]
-        );
+        ];
 
-        $isAvailable = false;
-        $index = 0;
-        $maxIndex = count($userNamesList) - 1;
-
-        do {
-            $availableUserName = $userNamesList[$index];
-            $isAvailable = $this->isUsernameAvailable($availableUserName);
-            $limit =  $index >= $maxIndex;
-            $index += 1;
-            if($limit){
-                break;
+        foreach ($userNamesList as $item) {
+            if ($this->isUsernameAvailable($item)) {
+                return $item;
             }
-        } while (!$isAvailable);
+        }
 
-        return $availableUserName;
+        return '';
     }
 
     /**
