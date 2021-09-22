@@ -16,6 +16,15 @@ class DeviceManager extends BaseManager {
     ];
 
     /**
+     * @param string $token
+     * @return Device|null
+     */
+    public function getByFirebaseToken(string $token): Device
+    {
+       return $this->repository->findOneBy(['firebaseToken' => $token]) ?? new Device();
+    }
+
+    /**
      * @return string
      */
     public function getEntityClass(): string

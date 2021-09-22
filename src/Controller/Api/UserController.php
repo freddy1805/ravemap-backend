@@ -280,7 +280,9 @@ class UserController extends BaseApiController
             $data = json_decode($request->getContent(), true);
             $data['user'] = $this->getUser();
 
-            if ($device = $this->deviceManager->create($data, true)) {
+            $device = $this->deviceManager->getByFirebaseToken($data['firebaseToken']);
+
+            if ($device = $this->deviceManager->update($device, $data, true)) {
                 return new Response($this->serializeToJson($device, ['user_device', 'user_list']), 200, [
                     'content-type' => self::JSON_CONTENT_TYPE,
                 ]);
