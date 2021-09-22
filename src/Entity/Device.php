@@ -68,11 +68,25 @@ class Device {
     /**
      * @var string
      * @ORM\Column(type="text", unique=true, nullable=false)
+     */
+    private $firebaseToken;
+
+    /**
+     * @var \DateTime
+     * @ORM\Column(type="datetime")
      * @Serializer\Groups({
      *     "user_device"
      * })
      */
-    private $firebaseToken;
+    private $registeredAt;
+
+    /**
+     * Device constructor.
+     */
+    public function __construct()
+    {
+        $this->registeredAt = new \DateTime('now');
+    }
 
     /**
      * @return string
@@ -194,6 +208,14 @@ class Device {
         $this->firebaseToken = $firebaseToken;
 
         return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getRegisteredAt(): \DateTime
+    {
+        return $this->registeredAt;
     }
 
     /**
