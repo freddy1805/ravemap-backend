@@ -60,6 +60,8 @@ class UserRegisteredMessageHandler implements MessageHandlerInterface
             $user->setConfirmationToken($this->tokenGenerator->generateToken());
         }
 
-        $this->mailer->sendConfirmationEmailMessage($user);
+        if ($this->userManager->save($user)) {
+            $this->mailer->sendConfirmationEmailMessage($user);
+        }
     }
 }

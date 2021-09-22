@@ -2,6 +2,7 @@
 
 namespace App\EventListener;
 
+use App\Exception\ValidationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -24,6 +25,9 @@ class ExceptionListener
         BadRequestHttpException::class => [
             'status' => 400
         ],
+        ValidationException::class => [
+            'status' => 400
+        ]
     ];
 
     /**

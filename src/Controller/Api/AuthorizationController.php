@@ -11,6 +11,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use OpenApi\Annotations as OA;
@@ -103,6 +105,39 @@ class AuthorizationController extends BaseApiController
 
     /**
      * @OA\Post(
+     *     operationId="checkUsername",
+     *     security={},
+     *     summary="Check username availability",
+     *     tags={"Authorization"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *              title="CheckUsernameAvailabilityObject",
+     *              type="object",
+     *              @OA\Property(property="username", type="string", example="max_mustermann")
+     *         )
+     *
+     *     ),
+     *     @OA\Response(response="200", description="Returns json object with available indecator"),
+     * )
+     * @Route("/username", name="check_username", methods={"POST"})
+     */
+    public function checkUsernameAction(Request $request): Response
+    {
+        $data = json_decode($request->getContent(), true);
+
+        if (!isset($data['username'])) {
+            throw new BadRequestHttpException('No username found');
+        }
+
+        return new JsonResponse([
+            'available' => $this->userManager->isUsernameAvailable($data['username'])
+        ]);
+
+    }
+
+    /**
+     * @OA\Post(
      *     operationId="register",
      *     security={},
      *     summary="Register a new account",
@@ -121,25 +156,20 @@ class AuthorizationController extends BaseApiController
      *     @OA\Response(response="400", description="Bad request! Check payload")
      * )
      * @Route("/register", name="register", methods={"POST"})
+     * @throws ValidationException
      */
-    public function registerAction(Request $request)
+    public function registerAction(Request $request): Response
     {
-        try {
-            $data = json_decode($request->getContent(), true);
+        $data = json_decode($request->getContent(), true);
 
-            /** @var User $user */
-            $user = $this->userManager->create($data, true);
+        /** @var User $user */
+        $user = $this->userManager->create($data, true);
 
-            $this->messageBus->dispatch(new UserRegisteredMessage($user));
+        $this->messageBus->dispatch(new UserRegisteredMessage($user));
 
-            return new Response($this->serializeToJson($user, ['user_detail']), 201, [
-                'content-type' => self::JSON_CONTENT_TYPE
-            ]);
-        } catch (ValidationException $validationException) {
-            return new JsonResponse([
-                'error' => 'data.not_valid',
-            ], 400);
-        }
+        return new Response($this->serializeToJson($user, ['user_detail']), 201, [
+            'content-type' => self::JSON_CONTENT_TYPE
+        ]);
     }
 
     /**
@@ -160,6 +190,8 @@ class AuthorizationController extends BaseApiController
      *     @OA\Response(response="400", description="Bad request! Check payload")
      * )
      * @Route("/confirm", name="confirm_account", methods={"POST"})
+     * @throws NotFoundHttpException
+     * @throws BadRequestHttpException
      */
     public function confirmAction(Request $request): Response
     {
@@ -174,13 +206,9 @@ class AuthorizationController extends BaseApiController
                 ]);
             }
 
-            return new JsonResponse([
-                'error' => 'result.not_found'
-            ], 404);
+            throw new NotFoundHttpException('result.not_found');
         }
 
-        return new JsonResponse([
-            'error' => 'data.not_valid'
-        ], 400);
+        throw new BadRequestHttpException('data.not_valid');
     }
 }

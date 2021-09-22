@@ -27,6 +27,15 @@ class UserManager extends BaseManager {
     }
 
     /**
+     * @param string $username
+     * @return bool
+     */
+    public function isUsernameAvailable(string $username): bool
+    {
+        return $this->repository->findOneBy(['username' => $username]) === null;
+    }
+
+    /**
      * @param string $token
      * @return User|null
      */
