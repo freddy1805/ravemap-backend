@@ -331,6 +331,49 @@ class User extends BaseUser
     }
 
     /**
+     * @return Collection
+     */
+    public function getDevices(): Collection
+    {
+        return $this->devices;
+    }
+
+    /**
+     * @param Collection $devices
+     * @return User
+     */
+    public function setDevices(Collection $devices): self
+    {
+        $this->devices = $devices;
+
+        return $this;
+    }
+
+    /**
+     * @param Device $device
+     * @return User
+     */
+    public function addDevice(Device $device): self
+    {
+        if (!$this->devices->contains($device)) {
+            $this->devices->add($device);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Device $device
+     * @return User
+     */
+    public function removeDevice(Device $device): self
+    {
+        $this->devices->removeElement($device);
+
+        return $this;
+    }
+
+    /**
      * @return array
      */
     public function toArray(): array

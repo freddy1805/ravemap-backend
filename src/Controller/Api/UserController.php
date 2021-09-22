@@ -253,6 +253,28 @@ class UserController extends BaseApiController
     }
 
     /**
+     * @OA\Get(
+     *     operationId="getDevices",
+     *     summary="Get device list of authenticated user",
+     *     tags={"User"},
+     *     @OA\Response(response="200", description="Returns the registered devices"),
+     *     @OA\Response(response="401", description="Login faild. Invalid credentials")
+     * )
+     * @Route("/devices", name="devices", methods={"GET"})
+     * @param Request $request
+     * @return Response
+     */
+    public function listDevicesAction(Request $request): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        return new Response($this->serializeToJson($user->getDevices(), ['user_device']), 200, [
+            'content-type' => self::JSON_CONTENT_TYPE,
+        ]);
+    }
+
+    /**
      * @OA\Post(
      *     operationId="registerDevice",
      *     summary="Register new device to authenticated user",
