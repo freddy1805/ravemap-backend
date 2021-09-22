@@ -131,7 +131,6 @@ class AuthorizationController extends BaseApiController
 
         return new JsonResponse([
             'available' => $this->userManager->isUsernameAvailable($data['username']),
-            'suggestion' => $this->userManager->generateUniqueUsername($data['username'])
         ]);
 
     }
