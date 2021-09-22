@@ -32,7 +32,7 @@ class EventMessageHandler implements MessageHandlerInterface
         $notification = $this->FCMClient->createTopicNotification(
             $message->getAuthor()->getUsername() . ' @ ' . $message->getEvent()->getName(),
             $message->getContent(),
-            'event-' . $message->getEvent()->getId(),
+            'event-' . $message->getEvent()->getId() . '-messages',
         );
 
         $this->FCMClient->sendNotification($notification);

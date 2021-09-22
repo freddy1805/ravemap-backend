@@ -40,7 +40,7 @@ class EventRemovedMessageHandler implements MessageHandlerInterface
         $notification = $this->FCMClient->createTopicNotification(
             $event->getName(),
             $message,
-            'event-' . $eventRemovedMessage->getEventId(),
+            'event-' . $eventRemovedMessage->getEventId() . '-info',
         );
 
         $this->FCMClient->sendNotification($notification);
