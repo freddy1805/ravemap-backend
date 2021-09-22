@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\DeviceRepository;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * Class Device
@@ -31,30 +32,45 @@ class Device {
     /**
      * @var string
      * @ORM\Column(type="string", unique=true, nullable=false)
+     * @Serializer\Groups({
+     *     "user_device"
+     * })
      */
     private $deviceId;
 
     /**
      * @var string
      * @ORM\Column(type="text", nullable=false)
+     * @Serializer\Groups({
+     *     "user_device"
+     * })
      */
     private $name;
 
     /**
      * @var string
      * @ORM\Column(type="text")
+     * @Serializer\Groups({
+     *     "user_device"
+     * })
      */
     private $os;
 
     /**
      * @var string
      * @ORM\Column(type="text")
+     * @Serializer\Groups({
+     *     "user_device"
+     * })
      */
     private $appVersion;
 
     /**
      * @var string
      * @ORM\Column(type="text", unique=true, nullable=false)
+     * @Serializer\Groups({
+     *     "user_device"
+     * })
      */
     private $firebaseToken;
 
