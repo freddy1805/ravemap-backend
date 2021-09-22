@@ -51,6 +51,8 @@ class UserManager extends BaseManager {
             $username.$numSufix[3]
         ];
 
+        shuffle($userNamesList);
+
         foreach ($userNamesList as $item) {
             if ($this->isUsernameAvailable($item)) {
                 return $item;
