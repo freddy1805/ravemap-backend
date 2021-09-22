@@ -30,7 +30,6 @@ class User extends BaseUser
 
     /**
      * @var string
-     * @ORM\Column(type="string", unique=true)
      * @Serializer\Groups({
      *     "user_list",
      *     "user_detail"

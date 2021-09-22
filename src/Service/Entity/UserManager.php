@@ -32,7 +32,7 @@ class UserManager extends BaseManager {
      */
     public function isUsernameAvailable(string $username): bool
     {
-        return $this->repository->findOneBy(['username' => $username]) === null;
+        return $this->repository->findOneBy(['usernameCanonical' => trim($username)]) === null;
     }
 
     /**
